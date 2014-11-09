@@ -82,7 +82,9 @@
   Mapper.models.Settings = Backbone.Model.extend({
     defaults: {
       blankColor: '#eeeeee',
-      heatScale: false
+      heatClamp: true,
+      heatScale: false,
+      title: 'My Awesome Map'
     }
   });
 

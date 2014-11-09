@@ -6,52 +6,64 @@
 </head>
 <body>
 
-  <div class="map-editor">
+  <div class="mapper">
     <div id="map-view" class="map-view"></div>
-    <div class="map-config">
+    <div class="map-editor">
 
-      <div id="legend-form-view" class="map-legend">
-        <header>
-          <h1>Legend</h1>
-          <button id="legend-form-add" class="action-util legend-form-add">Add</button>
-        </header>
-        <table class="legend-form-view">
-          <thead>
+      <div class="map-config">
+        <div id="map-legend-form">
+          <header>
+            <h1>Legend</h1>
+            <button id="legend-form-add" class="action-util legend-form-add">+</button>
+          </header>
+          <table class="legend-form-view">
+            <thead>
+              <tr>
+                <th class="show">Show</th>
+                <th class="label">Label</th>
+                <th class="color">Hex</th>
+                <th class="value">Value</th>
+                <th class="operator">Compare</th>
+                <th class="destroy"></th>
+              </tr>
+            </thead>
+            <tbody data-bind="collection:$collection"></tbody>
+          </table>
+          <script type="text/template" id="legend-form-item-view">
             <tr>
-              <th class="show">Show</th>
-              <th class="label">Label</th>
-              <th class="color">Hex</th>
-              <th class="value">Value</th>
-              <th class="operator">Compare</th>
-              <th class="destroy"></th>
+              <td><span class="swatch" data-bind="css:{'background-color':color}"><input type="checkbox" data-bind="checked:inLegend"></span></td>
+              <td><input type="text" name="label" data-bind="value:label"></td>
+              <td><input type="text" name="color" data-bind="value:color"></td>
+              <td><input type="number" name="value" data-bind="value:integer(value)"></td>
+              <td>
+                <select data-bind="value:operator">
+                  <option value="lt">&lt;</option>
+                  <option value="lte">&lt;=</option>
+                  <option value="eq">=</option>
+                  <option value="gte">&gt;=</option>
+                  <option value="gt">&gt;</option>
+                </select>
+              </td>
+              <td><button class="destroy">x</button></td>
             </tr>
-          </thead>
-          <tbody data-bind="collection:$collection"></tbody>
-        </table>
-        <script type="text/template" id="legend-form-item-view">
-          <tr>
-            <td><span class="swatch" data-bind="css:{'background-color':color}"><input type="checkbox" data-bind="checked:inLegend"></span></td>
-            <td><input type="text" name="label" data-bind="value:label"></td>
-            <td><input type="text" name="color" data-bind="value:color"></td>
-            <td><input type="number" name="value" data-bind="value:integer(value)"></td>
-            <td>
-              <select data-bind="value:operator">
-                <option value="lt">&lt;</option>
-                <option value="lte">&lt;=</option>
-                <option value="eq">=</option>
-                <option value="gte">&gt;=</option>
-                <option value="gt">&gt;</option>
-              </select>
-            </td>
-            <td><button class="destroy">x</button></td>
-          </tr>
-        </script>
-        <p><label>Blank color hex: <input type="text" data-bind="value:blankColor"></label></p>
-        <p><label>Render heat scale: <input type="checkbox" data-bind="checked:heatScale"></label> (only uses two legend keys)</p>
-        <a href="#" download="map.svg" id="save-image">Save Image</a>
+          </script>
+          <p><label>Render heat scale: <input type="checkbox" data-bind="checked:heatScale"></label> <em>(uses exactly two legend keys)</em></p>
+        </div>
+
+        <div id="map-settings-form">
+          <header>
+            <h1>Settings</h1>
+          </header>
+          <p>
+            <label class="title-label">Title: <input type="text" data-bind="value:title"></label>
+            <label>Blank color: <input type="text" data-bind="value:blankColor"></label>
+          </p>
+          
+          <a href="#" download="map.svg" id="save-image">Save Image</a>
+        </div>
       </div>
 
-      <div id="map-data" class="map-data">
+      <div id="map-data-form" class="map-data">
         <header>
           <h1>Map Data</h1>
           <div id="map-data-dropzone" class="action-util map-data-dropzone">csv</div>
@@ -79,6 +91,7 @@
   <script src="js/map/models.js"></script>
   <script src="js/map/views/map-data.js"></script>
   <script src="js/map/views/map-legend.js"></script>
+  <script src="js/map/views/map-settings.js"></script>
   <script src="js/map/views/map-render.js"></script>
   <script>Mapper.init();</script>
 </body>

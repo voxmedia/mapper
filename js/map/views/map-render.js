@@ -16,7 +16,7 @@ Mapper.views.MapRenderView = Backbone.View.extend({
     this.save = new Image();
 
     this.listenTo(this.geos, 'reset change:value', this.render);
-    this.listenTo(this.thresholds, 'add change', this.render);
+    this.listenTo(this.thresholds, 'add remove change', this.render);
     this.listenTo(this.settings, 'change', this.render);
   },
 
@@ -74,6 +74,7 @@ Mapper.views.MapRenderView = Backbone.View.extend({
   render: function() {
     this.renderMap();
     this.renderLegend();
+    this.renderTitle();
     this.renderSave();
   },
 
@@ -127,6 +128,18 @@ Mapper.views.MapRenderView = Backbone.View.extend({
 
     // Append new legend graphic to SVG:
     this.svg.appendChild(this.gLegend);
+  },
+
+  renderTitle: function() {
+    if (this.gTitle) this.gTitle.parentNode.removeChild(this.gTitle);
+    var title = this.gTitle = document.createElementNS(this.SVG_NS, 'text');
+    title.setAttribute('x', 475);
+    title.setAttribute('y', 10);
+    title.setAttribute('style', 'alignment-baseline:hanging;font-size:24;font-weight:bold;text-anchor:middle;');
+    title.innerHTML = this.settings.get('title');
+
+    // Append new legend graphic to SVG:
+    this.svg.appendChild(this.gTitle);
   },
 
   // Renders the save-image data:

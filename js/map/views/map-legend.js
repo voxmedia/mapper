@@ -16,7 +16,7 @@
 
   // Form view for full legend region:
   Mapper.views.MapLegendView = Backbone.Epoxy.View.extend({
-    el: '#legend-form-view',
+    el: '#map-legend-form',
     itemView: LegendFormItemView,
 
     events: {

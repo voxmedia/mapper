@@ -11,6 +11,10 @@ var Mapper = {
       collection: this.thresholds,
       model: this.settings
     });
+
+    this.mapSettingsView = new this.views.MapSettingsView({
+      model: this.settings
+    });
     
     this.mapDataView = new this.views.MapDataView({
       collection: this.geos,

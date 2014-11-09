@@ -2,7 +2,7 @@
 // Map data form view (with drag-and-drop CSV)
 
 Mapper.views.MapDataView = Backbone.View.extend({
-  el: '#map-data',
+  el: '#map-data-form',
   template: _.template($('#map-data-list-item').html(), {variable: 'd'}),
 
   initialize: function() {

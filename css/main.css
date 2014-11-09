@@ -13,7 +13,12 @@ input {
   width: 75px;
 }
 
-.map-editor {
+input[type="checkbox"] {
+  margin-right: 10px;
+  width: auto;
+}
+
+.mapper {
   margin: 50px auto;
   max-width: 800px;
   padding: 0 20px;
@@ -58,7 +63,8 @@ input {
 .map-data label {
 }
 
-.map-config {
+.map-editor {
+  background-color: #fcfcfc;
   border: 1px solid #eee;
   border-radius: 3px;
   display: table;
@@ -67,36 +73,39 @@ input {
   width: 100%;
 }
 
-.map-config header {
+.map-editor header {
+  background-color: #eee;
+  border-radius: 5px;
   height: 30px;
   line-height: 30px;
   margin-bottom: 15px;
+  padding: 5px 15px;
 }
 
-.map-config h1 {
+.map-editor h1 {
   float: left;
   font-size: 20px;
   margin: 0;
   margin-right: 15px;
 }
 
-.map-config .action-util {
-  display: inline-block;
+.map-editor .action-util {
   box-sizing: border-box;
+  display: inline-block;
+  float: right;
   height: 100%;
   line-height: 30px;
   width: 50px;
 }
 
 
-.map-legend {
+.map-config {
   display: table-cell;
   padding: 0 15px 0 0;
 }
 
 .legend-form-view {
   box-sizing: border-box;
-  margin-bottom: 25px;
   width: 100%;
 }
 
@@ -166,4 +175,12 @@ td select {
 
 .map-data-dropzone.pulse {
   border-color: #f00;
+}
+
+.title-label {
+  margin-right: 10px;
+}
+
+.title-label input {
+  width: 50%;
 }
