@@ -122,6 +122,7 @@ Mapper.views.MapRenderView = Backbone.View.extend({
       var label = document.createElementNS(this.SVG_NS, 'text');
       label.setAttribute('x', '35');
       label.setAttribute('y', mapHeight + 15 * (i+1));
+      label.setAttribute('style', 'font-family:"Balto";font-size:14;font-style:italic;font-weight:300;');
       label.innerHTML = t.get('label');
       this.gLegend.appendChild(label);
     }, this);
@@ -135,11 +136,18 @@ Mapper.views.MapRenderView = Backbone.View.extend({
     var title = this.gTitle = document.createElementNS(this.SVG_NS, 'text');
     title.setAttribute('x', 475);
     title.setAttribute('y', 10);
-    title.setAttribute('style', 'alignment-baseline:hanging;font-size:24;font-weight:bold;text-anchor:middle;');
+    title.setAttribute('style', 'alignment-baseline:hanging;font-family:"Balto";font-size:28;font-weight:700;text-anchor:middle;');
     title.innerHTML = this.settings.get('title');
+
+    if (this.gBrand) this.gBrand.parentNode.removeChild(this.gBrand);
+    var brand = this.gBrand = document.createElementNS(this.SVG_NS, 'path');
+    brand.setAttribute('d', VoxLogo);
+    brand.setAttribute('fill', 'black');
+    brand.setAttribute('transform', 'translate(815, 560) scale(0.5)');
 
     // Append new legend graphic to SVG:
     this.svg.appendChild(this.gTitle);
+    this.svg.appendChild(this.gBrand);
   },
 
   // Renders the save-image data:
