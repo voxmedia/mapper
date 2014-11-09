@@ -1,0 +1,169 @@
+body {
+  font: 14px/1.5 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  margin: 0;
+}
+
+input {
+  border: 1px solid #eee;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font: 14px/1 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 6px;
+  width: 75px;
+}
+
+.map-editor {
+  margin: 50px auto;
+  max-width: 800px;
+  padding: 0 20px;
+}
+
+.map-view {
+  margin: 0 auto;
+  width: 60%;
+}
+
+.threshold-form label {
+  font-size: 11px;
+}
+
+.threshold-form input {
+  margin-right: 10px;
+}
+
+.threshold-form input[type="number"],
+.threshold-form input[name="color"] {
+  width: 50px;
+}
+
+.map-data ul {
+  border: 1px solid #eee;
+  list-style: none;
+  max-height: 200px;
+  margin: 0;
+  padding: 0;
+  overflow: auto;
+}
+
+.map-data li {
+  padding: 5px 10px;
+  text-transform: uppercase;
+}
+
+.map-data li:nth-child(odd) {
+  background-color: #f7f7f7;
+}
+
+.map-data label {
+}
+
+.map-config {
+  border: 1px solid #eee;
+  border-radius: 3px;
+  display: table;
+  padding: 15px;
+  table-layout: fixed;
+  width: 100%;
+}
+
+.map-config header {
+  height: 30px;
+  line-height: 30px;
+  margin-bottom: 15px;
+}
+
+.map-config h1 {
+  float: left;
+  font-size: 20px;
+  margin: 0;
+  margin-right: 15px;
+}
+
+.map-config .action-util {
+  display: inline-block;
+  box-sizing: border-box;
+  height: 100%;
+  line-height: 30px;
+  width: 50px;
+}
+
+
+.map-legend {
+  display: table-cell;
+  padding: 0 15px 0 0;
+}
+
+.legend-form-view {
+  box-sizing: border-box;
+  margin-bottom: 25px;
+  width: 100%;
+}
+
+.legend-form-view th {
+  font-size: 10px;
+  text-align: left;
+}
+
+.legend-form-view .swatch {
+  display: block;
+  height: 20px;
+  width: 20px;
+}
+
+.legend-form-view button.destroy {
+  background-color: #eee;
+  border: none;
+  border-radius: 50%;
+  color: #999;
+  cursor: pointer;
+  display: block;
+  font-size: 15px;
+  font-weight: bold;
+  height: 20px;
+  line-height: 10px;
+  text-align: center;
+  width: 20px;
+}
+
+.legend-form-view button.destroy:hover {
+  background-color: #c00;
+  color: white;
+}
+
+th.show { width: 20px; }
+th.value { width: 75px; }
+th.operator { width: 75px; }
+th.color { width: 75px; }
+th.destroy { width: 20px; }
+
+td {
+  padding-bottom: 10px;
+}
+
+td input,
+td select {
+  width: 100%;
+}
+
+
+
+.map-data {
+  display: table-cell;
+  width: 200px;
+}
+
+.map-data label {
+  display: inline-block;
+  width: 40px;
+}
+
+.map-data-dropzone {
+  border: 3px dashed #ccc;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.map-data-dropzone.pulse {
+  border-color: #f00;
+}
