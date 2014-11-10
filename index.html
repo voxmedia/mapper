@@ -3,6 +3,7 @@
 <head>
   <title></title>
   <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="css/tooltip.css">
 </head>
 <body>
 
@@ -58,7 +59,7 @@
             <label class="title-label">Title: <input type="text" data-bind="value:title"></label>
             <label>Blank color: <input type="text" data-bind="value:blankColor"></label>
           </p>
-          
+          <p><label class="title-label">Tooltip: <input type="text" data-bind="value:tooltip"></label></p>
           <a href="#" download="map.svg" id="save-image">Save Image</a>
         </div>
       </div>
@@ -89,6 +90,7 @@
   <script src="js/map/mapdata.js"></script>
   <script src="js/map/main.js"></script>
   <script src="js/map/models.js"></script>
+  <script src="js/map/interactive.js"></script>
   <script src="js/map/views/map-data.js"></script>
   <script src="js/map/views/map-legend.js"></script>
   <script src="js/map/views/map-settings.js"></script>

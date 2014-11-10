@@ -85,11 +85,22 @@ Mapper.views.MapRenderView = Backbone.View.extend({
     this.renderSave();
   },
 
+  getTooltip: function() {
+    var templateSettings = _.templateSettings
+    _.templateSettings = {interpolate: /\{\{(.+?)\}\}/g};
+    var template = _.template(this.settings.get('tooltip'));
+    _.templateSettings = templateSettings;
+    return template;
+  },
+
   // Renders the map graphics:
   renderMap: function() {
     // Remove any old graphic element, then create anew:
     if (this.gMap) this.gMap.parentNode.removeChild(this.gMap);
     this.gMap = document.createElementNS(this.SVG_NS, 'g');
+
+    // Gets a cached tooltip function for render fields:
+    var tooltip = this.getTooltip();
 
     // Add all geography shapes:
     this.geos.each(function(geo) {
@@ -98,6 +109,7 @@ Mapper.views.MapRenderView = Backbone.View.extend({
       geo.shape.setAttribute('fill', this.getColor(geo.get('value')));
       geo.shape.setAttribute('stroke', 'rgba(255,255,255,0.25)');
       geo.shape.setAttribute('stroke-width', '1');
+      geo.shape.setAttribute('data-tooltip', tooltip(geo.attributes));
       this.gMap.appendChild(geo.shape);
     }, this);
 

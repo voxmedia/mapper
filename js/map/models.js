@@ -84,7 +84,8 @@
       blankColor: '#eeeeee',
       heatClamp: true,
       heatScale: false,
-      title: 'My Awesome Map'
+      title: 'My Awesome Map',
+      tooltip: 'State {{ id }}: {{ value }}'
     }
   });
 
