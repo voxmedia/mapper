@@ -26,11 +26,14 @@ Mapper.views.MapDataView = Backbone.View.extend({
     var max = -Infinity;
 
     this.collection.each(function(geo) {
-      min = Math.min(min, geo.get('value'));
-      max = Math.max(max, geo.get('value'));
+      var value = geo.get('value');
+      if (!isNaN(value)) {
+        min = Math.min(min, value);
+        max = Math.max(max, value);
+      }
     });
 
-    this.$('#map-data-range').html('Min: '+min+', Max: '+max);
+    this.$('#map-data-range').html('<b>Min:</b> '+min+', <b>Max:</b> '+max);
   },
 
   events: {

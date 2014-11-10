@@ -20,8 +20,10 @@ Mapper.views.MapRenderView = Backbone.View.extend({
     this.listenTo(this.settings, 'change', this.render);
   },
 
+  // Selects a plotted cohort color for a value:
+  // Cohorts use value thresholds and editorially defined comparison operators.
   getCohortColor: function(value) {
-    var threshold = this.thresholds.find(function(t, i) {
+    var threshold = this.thresholds.find(function(t) {
       var v = t.get('value');
       var c = t.get('operator');
       if (c === 'lt' && value < v) return true;
@@ -34,13 +36,16 @@ Mapper.views.MapRenderView = Backbone.View.extend({
     return threshold ? threshold.get('color') : this.settings.get('blankColor');
   },
 
+  // Gets the interpolated heat color for a value:
+  // Heat interpolation calculates the midpoint color between two values.
   getHeatColor: function(value) {
     var low = this.thresholds.at(0);
     var high = this.thresholds.at(1);
 
-    if (!low || !high || value < low.get('value') || value > high.get('value')) {
-      return this.settings.get('blankColor');
-    }
+    // Special-case out the color selection for out-of-range values:
+    if (!low || !high) return this.settings.get('blankColor');
+    else if (value < low.get('value')) return low.get('color');
+    else if (value > high.get('value')) return high.get('color');
     
     // Calculate midpoint percentage:
     var lv = low.get('value');
@@ -67,6 +72,8 @@ Mapper.views.MapRenderView = Backbone.View.extend({
     return 'rgb('+ cr +','+ cg +','+ cb +')';
   },
 
+  // Gets the paint color for a value:
+  // Will select between heat and cohort plotting based on settings.
   getColor: function(value) {
     return this.settings.get('heatScale') ? this.getHeatColor(value) : this.getCohortColor(value);
   },
@@ -112,15 +119,15 @@ Mapper.views.MapRenderView = Backbone.View.extend({
     this.thresholds.each(function(t, i) {
       if (!t.get('inLegend')) return;
       if (!t.swatch) t.swatch = document.createElementNS(this.SVG_NS, 'rect');
-      t.swatch.setAttribute('x', '5');
+      t.swatch.setAttribute('x', 5);
       t.swatch.setAttribute('y', mapHeight + 15 * i);
-      t.swatch.setAttribute('width', '20');
-      t.swatch.setAttribute('height', '15');
+      t.swatch.setAttribute('width', 20);
+      t.swatch.setAttribute('height', 15);
       t.swatch.setAttribute('fill', t.get('color'));
       this.gLegend.appendChild(t.swatch);
 
       var label = document.createElementNS(this.SVG_NS, 'text');
-      label.setAttribute('x', '35');
+      label.setAttribute('x', 35);
       label.setAttribute('y', mapHeight + 15 * (i+1));
       label.setAttribute('style', 'font-family:"Balto";font-size:14;font-style:italic;font-weight:300;');
       label.innerHTML = t.get('label');
@@ -131,6 +138,7 @@ Mapper.views.MapRenderView = Backbone.View.extend({
     this.svg.appendChild(this.gLegend);
   },
 
+  // Renders the map title graphic:
   renderTitle: function() {
     if (this.gTitle) this.gTitle.parentNode.removeChild(this.gTitle);
     var title = this.gTitle = document.createElementNS(this.SVG_NS, 'text');
