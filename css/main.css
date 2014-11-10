@@ -89,7 +89,6 @@ input[type="checkbox"] {
   display: table;
   padding: 15px;
   table-layout: fixed;
-  width: 100%;
 }
 
 .map-editor header {
