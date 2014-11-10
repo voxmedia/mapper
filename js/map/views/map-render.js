@@ -96,6 +96,8 @@ Mapper.views.MapRenderView = Backbone.View.extend({
       if (!geo.shape) geo.shape = document.createElementNS(this.SVG_NS, 'path');
       geo.shape.setAttribute('d', geo.get('shape'));
       geo.shape.setAttribute('fill', this.getColor(geo.get('value')));
+      geo.shape.setAttribute('stroke', 'rgba(255,255,255,0.25)');
+      geo.shape.setAttribute('stroke-width', '1');
       this.gMap.appendChild(geo.shape);
     }, this);
 
