@@ -7,21 +7,23 @@ var Mapper = {
     this.geos = new this.models.Geographies();
     this.thresholds = new this.models.Thresholds();
     
-    this.mapLegendView = new this.views.MapLegendView({
-      collection: this.thresholds,
+    var editorMain = new this.views.EditorMainView();
+
+    var editorSettings = new this.views.MapSettingsView({
       model: this.settings
     });
 
-    this.mapSettingsView = new this.views.MapSettingsView({
+    var editorLegend = new this.views.MapLegendView({
+      collection: this.thresholds,
       model: this.settings
     });
     
-    this.mapDataView = new this.views.MapDataView({
+    var editorData = new this.views.MapDataView({
       collection: this.geos,
       model: this.settings
     });
 
-    this.mapRenderView = new this.views.MapRenderView({
+    this.mapPreview = new this.views.MapRenderView({
       settings: this.settings,
       thresholds: this.thresholds,
       geos: this.geos

@@ -2,7 +2,7 @@
 
 Mapper.views.MapRenderView = Backbone.View.extend({
   SVG_NS: 'http://www.w3.org/2000/svg',
-  el: '#map-view',
+  el: '#map-preview',
 
   initialize: function(options) {
     _.extend(this, options);

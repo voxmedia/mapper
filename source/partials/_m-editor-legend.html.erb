@@ -1,0 +1,38 @@
+<section id="editor-legend" class="m-editor-view m-editor-legend">
+  <header>
+    <h1>Legend</h1>
+    <button id="editor-legend-add" class="action-util m-editor-legend__add">+</button>
+  </header>
+  <table class="legend-form">
+    <thead>
+      <tr>
+        <th class="show">Show</th>
+        <th class="label">Label</th>
+        <th class="color">Hex</th>
+        <th class="value">Value</th>
+        <th class="operator">Compare</th>
+        <th class="destroy"></th>
+      </tr>
+    </thead>
+    <tbody data-bind="collection:$collection"></tbody>
+  </table>
+  <script type="text/template" id="editor-legend-item">
+    <tr>
+      <td><span class="swatch" data-bind="css:{'background-color':color}"><input type="checkbox" data-bind="checked:inLegend"></span></td>
+      <td><input type="text" name="label" data-bind="value:label"></td>
+      <td><input type="text" name="color" data-bind="value:color"></td>
+      <td><input type="number" name="value" data-bind="value:integer(value)"></td>
+      <td>
+        <select data-bind="value:operator">
+          <option value="lt">&lt;</option>
+          <option value="lte">&lt;=</option>
+          <option value="eq">=</option>
+          <option value="gte">&gt;=</option>
+          <option value="gt">&gt;</option>
+        </select>
+      </td>
+      <td><button class="destroy">+</button></td>
+    </tr>
+  </script>
+  <p><label>Render heat scale: <input type="checkbox" data-bind="checked:heatScale"></label> <em>(uses exactly two legend keys)</em></p>
+</section>

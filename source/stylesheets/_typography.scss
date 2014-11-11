@@ -1,0 +1,20 @@
+@font-face {
+  font-family:"Balto";
+  src:url(http://cdn3.vox-cdn.com/fonts/vox/baltoweb-medium.v32923ad.eot);
+  src:url(http://cdn2.vox-cdn.com/fonts/vox/baltoweb-medium.v10502d2.woff) format("woff");
+  font-weight:500;
+  font-style:normal
+}
+
+@font-face {
+  font-family:"Balto";
+  src:url(http://cdn3.vox-cdn.com/fonts/vox/baltoweb-bold.v8e1522a.eot);
+  src:url(http://cdn2.vox-cdn.com/fonts/vox/baltoweb-bold.v02933a5.woff) format("woff");
+  font-weight:700;
+  font-style:normal
+}
+
+h1 {
+  font-family: $balto;
+  font-size: 20px;
+}

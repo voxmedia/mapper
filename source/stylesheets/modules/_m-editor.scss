@@ -1,0 +1,66 @@
+$m: '.m-editor';
+
+#{$m} {
+  header {
+    background-color: #eee;
+    border-radius: 5px;
+    height: 30px;
+    line-height: 30px;
+    margin-bottom: 15px;
+    padding: 5px 15px;
+  }
+
+  header h1 {
+    float: left;
+    margin: 0;
+    margin-right: 15px;
+  }
+}
+
+#{$m}-view {
+  box-sizing: border-box;
+  display: none;
+  height: calc(100% - 35px);
+  padding: 15px;
+  overflow: auto;
+}
+
+.action-util {
+  box-sizing: border-box;
+  border-radius: 5px;
+  display: inline-block;
+  float: right;
+  height: 100%;
+  line-height: 30px;
+  width: 50px;
+}
+
+#{$m}__tabs {
+  @include clearfix;
+  background-color: #777;
+  border: 5px solid #777;
+  border-bottom: none;
+
+  li {
+    float: left;
+    width: 50%;
+  }
+
+  a {
+    border-radius: 10px 10px 0 0;
+    display: block;
+    color: white;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+
+    &:hover {
+      background-color: rgba(255, 255, 255, 0.15);
+    }
+
+    &.active {
+      background-color: white;
+      color: black;
+    }
+  }
+}

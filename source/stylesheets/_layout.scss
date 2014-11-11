@@ -1,0 +1,25 @@
+.l-preview,
+.l-editor {
+  height: 50%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 60%;
+}
+
+.l-preview {
+  display: table-cell;
+}
+
+.l-editor {
+  bottom: 0;
+  top: auto;
+}
+
+.l-data {
+  height: 100%;
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 40%;
+}

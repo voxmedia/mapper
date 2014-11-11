@@ -1,0 +1,32 @@
+body {
+  font: 14px/1.5 'Helvetica Neue', Helvetica, sans-serif;
+  margin: 0;
+  position: relative;
+  width: 100%;
+}
+
+html,
+body {
+  height: 100%;
+  overflow:hidden;
+}
+
+a {
+  color: #6d98a8;
+  text-decoration: none;
+}
+
+input {
+  border: 1px solid #eee;
+  border-radius: 5px;
+  box-sizing: border-box;
+  font: 14px/1 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 6px;
+  width: 75px;
+}
+
+input[type="checkbox"] {
+  margin-right: 10px;
+  width: auto;
+}

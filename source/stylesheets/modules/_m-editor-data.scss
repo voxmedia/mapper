@@ -1,0 +1,43 @@
+$m: '.m-editor-data';
+
+#{$m} {
+  header {
+    background-color: #777;
+    height: 30px;
+    margin: 0;
+  }
+}
+
+#{$m}__dropzone {
+  border: 3px dashed #ccc;
+  text-align: center;
+
+  &.pulse {
+    border-color: #f00;
+  }
+}
+
+#{$m}__table {
+  border: 1px solid #eee;
+  height: calc(100% - 60px);
+  margin: 0;
+  padding: 0;
+  position: relative;
+  overflow: auto;
+
+  table {
+    min-width: 100%;
+  }
+
+  th, td {
+    max-width: 80px;
+  }
+
+  tr:nth-child(odd) td {
+    background-color: #f7f7f7;
+  }
+
+  thead {
+    
+  }
+}

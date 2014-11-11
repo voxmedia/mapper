@@ -1,0 +1,19 @@
+---
+title: Vox.com Mapper
+---
+<div class="l-preview">
+  <%= partial 'partials/m-map-preview' %>
+</div>
+
+<div id="editor-main" class="l-editor m-editor">
+  <ul class="m-editor__tabs">
+    <li><a href="#settings" data-editor-view="editor-settings">Setup</a></li>
+    <li><a href="#legend" data-editor-view="editor-legend">Colors</a></li>
+  </ul>
+  <%= partial 'partials/m-editor-settings' %>
+  <%= partial 'partials/m-editor-legend' %>
+</div>
+
+<%= partial 'partials/m-editor-data' %>
+
+<%= javascript_include_tag 'application' %>

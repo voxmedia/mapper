@@ -1,0 +1,95 @@
+$m: '.m-editor-legend';
+
+#{$m}__add {
+  background-color: $action-color;
+  border: none;
+  color: white;
+  cursor: pointer;
+  font: 700 26px/30px $balto;
+  transition: background-color 0.4s;
+
+  &:hover {
+    background-color: tint($action-color, 30%);
+  }
+}
+
+.legend-form {
+  box-sizing: border-box;
+  width: 100%;
+
+  th {
+    font-size: 10px;
+    font-weight: bold;
+    text-align: left;
+  }
+
+  .swatch {
+    border-radius: 3px;
+    display: block;
+    height: 16px;
+    padding: 2px;
+    width: 16px;
+
+    input {
+      -moz-appearance: none;
+      -webkit-appearance: none;
+      appearance: none;
+      background-color: white;
+      border: none;
+      border-radius: 2px;
+      cursor: pointer;
+      display: block;
+      height: 100%;
+      width: 100%;
+
+      &:checked {
+        background-color: transparent;
+      }
+    }
+  }
+
+  button.destroy {
+    background-color: #eee;
+    border: none;
+    border-radius: 50%;
+    color: #999;
+    cursor: pointer;
+    display: block;
+    font: 700 20px/20px $balto;
+    height: 20px;
+    text-align: center;
+    @include transform(rotate(45deg));
+    @include transition(background-color 0.4s);
+    width: 20px;
+
+    &:hover {
+      background-color: $action-color;
+      color: white;
+    }
+  }
+
+  td {
+    padding-bottom: 10px;
+    padding-right: 10px;
+    
+    input,
+    select {
+      width: 100%;
+    }
+
+    &.show { width: 20px; }
+    &.value { width: 75px; }
+    &.operator { width: 75px; }
+    &.color { width: 75px; }
+    &.destroy { width: 20px; padding-right: none; }
+  }
+}
+
+
+.title-label {
+  margin-right: 10px;
+}
+
+.title-label input {
+  width: 50%;
+}

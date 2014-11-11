@@ -2,7 +2,7 @@
 
   // Individual line item views for legend form:
   var LegendFormItemView = Backbone.Epoxy.View.extend({
-    el: $('#legend-form-item-view').html(),
+    el: $('#editor-legend-item').html(),
 
     events: {
       'click .destroy': 'onDestroy'
@@ -16,11 +16,11 @@
 
   // Form view for full legend region:
   Mapper.views.MapLegendView = Backbone.Epoxy.View.extend({
-    el: '#map-legend-form',
+    el: '#editor-legend',
     itemView: LegendFormItemView,
 
     events: {
-      'click #legend-form-add': 'onAddItem'
+      'click #editor-legend-add': 'onAddItem'
     },
 
     onAddItem: function() {

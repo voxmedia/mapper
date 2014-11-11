@@ -1,9 +1,10 @@
 
 // Map data form view (with drag-and-drop CSV)
 
+Mapper.views.MapDataView
+
 Mapper.views.MapDataView = Backbone.View.extend({
-  el: '#map-data-form',
-  template: _.template($('#map-data-list-item').html(), {variable: 'd'}),
+  el: '#editor-data',
 
   initialize: function() {
     this.listenTo(this.collection, 'reset', this.render);
@@ -11,14 +12,28 @@ Mapper.views.MapDataView = Backbone.View.extend({
   },
 
   render: function() {
-    var html = '';
+    var fields = this.collection.getFields();
+    var head = '<th>id</th>';
+    var body = '';
+
+    _.each(fields, function(field) {
+      head += '<th>'+field+'</th>';
+    });
 
     this.collection.each(function(geo) {
-      html += this.template(geo.attributes);
+      var row = ['<tr><td>',geo.id,'</td>'];
+
+      for (var i=0; i < fields.length; i++) {
+        row.push('<td><input type="text" name="',fields[i],'" value="',geo.get(fields[i]),'"></td>');
+      }
+      
+      row.push('</tr>');
+      body += row.join('');
     }, this);
 
-    this.$('#map-data-list').html(html);
-    this.renderRange();
+    this.$('thead').html('<tr>'+head+'</tr>');
+    this.$('tbody').html(body);
+    //this.renderRange();
   },
 
   renderRange: function() {
@@ -71,7 +86,7 @@ Mapper.views.MapDataView = Backbone.View.extend({
 
   onValue: function(evt) {
     var $field = this.$(evt.currentTarget);
-    var geo = this.collection.get($field.attr('name'));
-    if (geo) geo.set('value', $field.val());
+    //var geo = this.collection.get($field.attr('name'));
+    //if (geo) geo.set('value', $field.val());
   }
 });
