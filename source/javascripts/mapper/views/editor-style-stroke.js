@@ -1,8 +1,8 @@
 (function() {
 
   // Individual line item views for legend form:
-  var LegendFormItemView = Backbone.Epoxy.View.extend({
-    el: $('#editor-legend-item').html(),
+  var EditorStyleStrokeItemView = Backbone.Epoxy.View.extend({
+    el: $('#style-stroke-item').html(),
 
     events: {
       'click .destroy': 'onDestroy'
@@ -15,15 +15,15 @@
 
 
   // Form view for full legend region:
-  Mapper.views.MapLegendView = Backbone.Epoxy.View.extend({
-    el: '#editor-legend',
-    itemView: LegendFormItemView,
+  Mapper.views.EditorStyleStrokeView = Backbone.Epoxy.View.extend({
+    el: '#editor-style-stroke',
+    itemView: EditorStyleStrokeItemView,
 
     events: {
-      'click #editor-legend-add': 'onAddItem'
+      'click #style-stroke-add': 'onAdd'
     },
 
-    onAddItem: function() {
+    onAdd: function() {
       this.collection.newItem();
     }
   });

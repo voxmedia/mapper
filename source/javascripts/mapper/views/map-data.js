@@ -21,10 +21,10 @@ Mapper.views.MapDataView = Backbone.View.extend({
     });
 
     this.collection.each(function(geo) {
-      var row = ['<tr><td>',geo.id,'</td>'];
+      var row = ['<tr><td>',geo.id.toUpperCase(),'</td>'];
 
       for (var i=0; i < fields.length; i++) {
-        row.push('<td><input type="text" name="',fields[i],'" value="',geo.get(fields[i]),'"></td>');
+        row.push('<td><input type="text" name="',fields[i],'" value="',geo.get(fields[i]),'" data-id="'+geo.id+'"></td>');
       }
       
       row.push('</tr>');
@@ -33,7 +33,7 @@ Mapper.views.MapDataView = Backbone.View.extend({
 
     this.$('thead').html('<tr>'+head+'</tr>');
     this.$('tbody').html(body);
-    //this.renderRange();
+    this.renderRange();
   },
 
   renderRange: function() {
@@ -48,14 +48,14 @@ Mapper.views.MapDataView = Backbone.View.extend({
       }
     });
 
-    this.$('#map-data-range').html('<b>Min:</b> '+min+', <b>Max:</b> '+max);
+    this.$('#data-range').html('<b>Value Min:</b> '+min+', <b>Max:</b> '+max);
   },
 
   events: {
     'change input': 'onValue',
-    'dragover #map-data-dropzone': 'onZoneOver',
-    'dragleave #map-data-dropzone': 'onZoneOut',
-    'drop #map-data-dropzone': 'onZoneDrop'
+    'dragover #data-dropzone': 'onZoneOver',
+    'dragleave #data-dropzone': 'onZoneOut',
+    'drop #data-dropzone': 'onZoneDrop'
   },
 
   getDataTransfer: function(evt) {
@@ -68,12 +68,12 @@ Mapper.views.MapDataView = Backbone.View.extend({
     var dataTransfer = this.getDataTransfer(evt);
     if (dataTransfer) {
       dataTransfer.dropEffect = 'copy';
-      this.$('#map-data-dropzone').addClass('pulse');
+      this.$('#data-dropzone').addClass('pulse');
     }
   },
 
   onZoneOut: function(evt) {
-    this.$('#map-data-dropzone').removeClass('pulse');
+    this.$('#data-dropzone').removeClass('pulse');
   },
 
   onZoneDrop: function(evt) {
@@ -86,7 +86,7 @@ Mapper.views.MapDataView = Backbone.View.extend({
 
   onValue: function(evt) {
     var $field = this.$(evt.currentTarget);
-    //var geo = this.collection.get($field.attr('name'));
-    //if (geo) geo.set('value', $field.val());
+    var geo = this.collection.get($field.attr('data-id'));
+    if (geo) geo.set($field.attr('name'), $field.val());
   }
 });

@@ -1,0 +1,17 @@
+$m: '.m-share';
+
+#{$m} {
+  left: 10px;
+  position: absolute;
+  top: 10px;
+
+  li {
+    display: inline;
+    margin-left: 10px;
+  }
+
+  img {
+    max-height: 15px;
+    max-width: 15px;
+  }
+}

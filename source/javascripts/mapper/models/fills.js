@@ -1,6 +1,6 @@
 (function() {
 
-  var Threshold = Backbone.Model.extend({
+  var Fill = Backbone.Model.extend({
     defaults: {
       color: '#000000',
       inLegend: true,
@@ -10,8 +10,8 @@
     }
   });
 
-  Mapper.models.Thresholds = Backbone.Collection.extend({
-    model: Threshold,
+  Mapper.models.Fills = Backbone.Collection.extend({
+    model: Fill,
     comparator: 'value',
 
     initialize: function() {
@@ -19,7 +19,7 @@
     },
 
     newItem: function() {
-      this.add(Threshold.prototype.defaults);
+      this.add(Fill.prototype.defaults);
     }
   });
 

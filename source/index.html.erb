@@ -8,12 +8,13 @@ title: Vox.com Mapper
 <div id="editor-main" class="l-editor m-editor">
   <ul class="m-editor__tabs">
     <li><a href="#settings" data-editor-view="editor-settings">Setup</a></li>
-    <li><a href="#legend" data-editor-view="editor-legend">Colors</a></li>
+    <li><a href="#style" data-editor-view="editor-style">Styles</a></li>
   </ul>
   <%= partial 'partials/m-editor-settings' %>
-  <%= partial 'partials/m-editor-legend' %>
+  <%= partial 'partials/m-editor-style' %>
 </div>
 
 <%= partial 'partials/m-editor-data' %>
+<%= partial 'partials/m-share' %>
 
 <%= javascript_include_tag 'application' %>

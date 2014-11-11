@@ -16,34 +16,40 @@ Mapper.views.MapRenderView = Backbone.View.extend({
     this.save = new Image();
 
     this.listenTo(this.geos, 'reset change:value', this.render);
-    this.listenTo(this.thresholds, 'add remove change', this.render);
+    this.listenTo(this.fills, 'add remove change', this.render);
     this.listenTo(this.settings, 'change', this.render);
   },
 
   // Selects a plotted cohort color for a value:
-  // Cohorts use value thresholds and editorially defined comparison operators.
+  // Cohorts use value fills and editorially defined comparison operators.
   getCohortColor: function(value) {
-    var threshold = this.thresholds.find(function(t) {
+    var threshold = this.fills.find(function(t) {
       var v = t.get('value');
       var c = t.get('operator');
-      if (c === 'lt' && value < v) return true;
-      if (c === 'lte' && value <= v) return true;
-      if (c === 'eq' && value === v) return true;
-      if (c === 'gte' && value >= v) return true;
-      if (c === 'gt' && value > v) return true;
+      if (typeof v == 'number') {
+        // Numeric comparisons:
+        if (c === 'lt' && value < v) return true;
+        if (c === 'lte' && value <= v) return true;
+        if (c === 'eq' && value === v) return true;
+        if (c === 'gte' && value >= v) return true;
+        if (c === 'gt' && value > v) return true;
+      } else {
+        // Loose-typed value match:
+        if (value == v) return true;
+      }
     }, this);
 
-    return threshold ? threshold.get('color') : this.settings.get('blankColor');
+    return threshold ? threshold.get('color') : this.settings.get('fillColor');
   },
 
   // Gets the interpolated heat color for a value:
   // Heat interpolation calculates the midpoint color between two values.
   getHeatColor: function(value) {
-    var low = this.thresholds.at(0);
-    var high = this.thresholds.at(1);
+    var low = this.fills.at(0);
+    var high = this.fills.at(1);
 
     // Special-case out the color selection for out-of-range values:
-    if (!low || !high) return this.settings.get('blankColor');
+    if (!low || !high) return this.settings.get('fillColor');
     else if (value < low.get('value')) return low.get('color');
     else if (value > high.get('value')) return high.get('color');
     
@@ -107,7 +113,7 @@ Mapper.views.MapRenderView = Backbone.View.extend({
       if (!geo.shape) geo.shape = document.createElementNS(this.SVG_NS, 'path');
       geo.shape.setAttribute('d', geo.get('shape'));
       geo.shape.setAttribute('fill', this.getColor(geo.get('value')));
-      geo.shape.setAttribute('stroke', 'rgba(255,255,255,0.25)');
+      geo.shape.setAttribute('stroke', this.settings.get('strokeColor'));
       geo.shape.setAttribute('stroke-width', '1');
       geo.shape.setAttribute('data-tooltip', tooltip(geo.attributes));
       this.gMap.appendChild(geo.shape);
@@ -120,7 +126,7 @@ Mapper.views.MapRenderView = Backbone.View.extend({
   // Renders the legend graphics:
   renderLegend: function() {
     var mapHeight = 610;
-    var legendRows = Math.ceil(this.thresholds.length);
+    var legendRows = Math.ceil(this.fills.length);
 
     // Remove any old graphic element, then create anew:
     if (this.gLegend) this.gLegend.parentNode.removeChild(this.gLegend);
@@ -130,7 +136,7 @@ Mapper.views.MapRenderView = Backbone.View.extend({
     this.svg.setAttribute('viewBox', '0 0 950 '+(mapHeight + 15 * legendRows));
 
     // Create a swatch for each legend item:
-    this.thresholds.each(function(t, i) {
+    this.fills.each(function(t, i) {
       if (!t.get('inLegend')) return;
       if (!t.swatch) t.swatch = document.createElementNS(this.SVG_NS, 'rect');
       t.swatch.setAttribute('x', 5);
@@ -145,6 +151,7 @@ Mapper.views.MapRenderView = Backbone.View.extend({
       label.setAttribute('y', mapHeight + 15 * (i+1));
       label.setAttribute('style', 'font-family:"Balto";font-size:14;font-style:italic;font-weight:300;');
       label.innerHTML = t.get('label');
+      //console.log(label.getComputedTextLength());
       this.gLegend.appendChild(label);
     }, this);
 

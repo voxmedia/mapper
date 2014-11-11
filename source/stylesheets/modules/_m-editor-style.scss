@@ -1,4 +1,11 @@
-$m: '.m-editor-legend';
+$m: '.m-editor-style';
+
+#{$m} {
+  header {
+    border-radius: 5px;
+    margin-bottom: 15px;
+  }
+}
 
 #{$m}__add {
   background-color: $action-color;
@@ -13,7 +20,7 @@ $m: '.m-editor-legend';
   }
 }
 
-.legend-form {
+.style-form {
   box-sizing: border-box;
   width: 100%;
 
@@ -21,10 +28,18 @@ $m: '.m-editor-legend';
     font-size: 10px;
     font-weight: bold;
     text-align: left;
+
+    &.show { width: 20px; }
+    &.value { width: 80px; }
+    &.size { width: 40px; }
+    &.color { width: 80px; }
+    &.operator { width: 60px; }
+    &.destroy { width: 20px; padding-right: none; }
   }
 
   .swatch {
     border-radius: 3px;
+    border-style: solid;
     display: block;
     height: 16px;
     padding: 2px;
@@ -76,20 +91,5 @@ $m: '.m-editor-legend';
     select {
       width: 100%;
     }
-
-    &.show { width: 20px; }
-    &.value { width: 75px; }
-    &.operator { width: 75px; }
-    &.color { width: 75px; }
-    &.destroy { width: 20px; padding-right: none; }
   }
-}
-
-
-.title-label {
-  margin-right: 10px;
-}
-
-.title-label input {
-  width: 50%;
 }

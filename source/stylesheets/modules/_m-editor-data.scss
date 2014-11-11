@@ -1,16 +1,31 @@
 $m: '.m-editor-data';
 
 #{$m} {
+  background-color: white;
+  
   header {
-    background-color: #777;
-    height: 30px;
+    background-color: $gray-dark;
     margin: 0;
+  }
+
+  h1 {
+    color: white;
+    font-family: $balto;
+    font-size: 15px;
   }
 }
 
 #{$m}__dropzone {
-  border: 3px dashed #ccc;
+  border: 3px dashed $gray-medium;
+  color: white;
+  font: 13px $balto;
   text-align: center;
+  width: 75px;
+
+  span {
+    position: relative;
+    top: -2px;
+  }
 
   &.pulse {
     border-color: #f00;
@@ -18,7 +33,7 @@ $m: '.m-editor-data';
 }
 
 #{$m}__table {
-  border: 1px solid #eee;
+  border: 1px solid $gray-medium;
   height: calc(100% - 60px);
   margin: 0;
   padding: 0;
@@ -30,14 +45,38 @@ $m: '.m-editor-data';
   }
 
   th, td {
+    border-left: 1px solid $gray-light;
     max-width: 80px;
+    min-width: 40px;
+    padding: 5px 10px;
   }
 
   tr:nth-child(odd) td {
-    background-color: #f7f7f7;
+    background-color: $gray-bg;
   }
 
-  thead {
-    
+  th {
+    font-weight: bold;
+  }
+
+  input {
+    background: none;
+    border: none;
+    height: 100%;
+    padding: 0;
+    width: 100%;
+  }
+}
+
+#{$m}__range {
+  background-color: $gray-dark;
+  color: white;
+  font-style: italic;
+  height: 25px;
+  line-height: 25px;
+  padding: 0 15px;
+
+  b {
+    font-weight: bold;
   }
 }

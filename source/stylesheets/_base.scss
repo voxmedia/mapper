@@ -1,4 +1,5 @@
 body {
+  //background: image-url('background.png');
   font: 14px/1.5 'Helvetica Neue', Helvetica, sans-serif;
   margin: 0;
   position: relative;
@@ -16,14 +17,19 @@ a {
   text-decoration: none;
 }
 
-input {
+input,
+textarea {
   border: 1px solid #eee;
   border-radius: 5px;
   box-sizing: border-box;
   font: 14px/1 'Helvetica Neue', Helvetica, Arial, sans-serif;
   margin: 0;
   padding: 6px;
-  width: 75px;
+  width: 80px;
+
+  &.input-large {
+    width: 75%;
+  }
 }
 
 input[type="checkbox"] {

@@ -1,8 +1,5 @@
 <section id="editor-settings" class="m-editor-view m-editor-settings">
-  <p>
-    <label class="title-label">Title: <input type="text" data-bind="value:title"></label>
-    <label>Blank color: <input type="text" data-bind="value:blankColor"></label>
-  </p>
-  <p><label class="title-label">Tooltip: <input type="text" data-bind="value:tooltip"></label></p>
+  <p class="row"><label for="settings-title">Title:</label> <input id="settings-title" type="text" data-bind="value:title" class="input-large"></p>
+  <p class="row"><label for="settings-tooltip">Tooltip:</label> <textarea id="settings-tooltip" type="text" data-bind="value:tooltip" class="input-large"></textarea></p>
   <a href="#" download="map.svg" id="save-image">Save Image</a>
 </section>

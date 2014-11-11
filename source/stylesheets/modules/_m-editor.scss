@@ -2,22 +2,45 @@ $m: '.m-editor';
 
 #{$m} {
   header {
-    background-color: #eee;
-    border-radius: 5px;
-    height: 30px;
-    line-height: 30px;
-    margin-bottom: 15px;
+    background-color: $gray-light;
+    height: 25px;
+    line-height: 25px;
     padding: 5px 15px;
   }
 
-  header h1 {
+  h1 {
     float: left;
     margin: 0;
-    margin-right: 15px;
+  }
+
+  #{$m}__util {
+    box-sizing: border-box;
+    border-radius: 5px;
+    height: 25px;
+    float: right;
+    line-height: 25px;
+  }
+
+  #{$m}__module {
+    margin-bottom: 20px;
+  }
+
+  .row {
+    @include clearfix;
+    margin-bottom: 15px;
+
+    label {
+      display: block;
+      float: left;
+      height: 28px;
+      line-height: 28px;
+      width: 25%;
+    }
   }
 }
 
 #{$m}-view {
+  background-color: white;
   box-sizing: border-box;
   display: none;
   height: calc(100% - 35px);
@@ -25,20 +48,10 @@ $m: '.m-editor';
   overflow: auto;
 }
 
-.action-util {
-  box-sizing: border-box;
-  border-radius: 5px;
-  display: inline-block;
-  float: right;
-  height: 100%;
-  line-height: 30px;
-  width: 50px;
-}
-
 #{$m}__tabs {
   @include clearfix;
-  background-color: #777;
-  border: 5px solid #777;
+  background-color: $gray-dark;
+  border: 5px solid $gray-dark;
   border-bottom: none;
 
   li {
@@ -50,8 +63,8 @@ $m: '.m-editor';
     border-radius: 10px 10px 0 0;
     display: block;
     color: white;
+    font: 15px/30px $balto;
     height: 30px;
-    line-height: 30px;
     text-align: center;
 
     &:hover {
