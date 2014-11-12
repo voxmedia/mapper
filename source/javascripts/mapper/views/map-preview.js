@@ -15,67 +15,10 @@ Mapper.views.MapRenderView = Backbone.View.extend({
     this.$el.append(svg);
     this.save = new Image();
 
-    this.listenTo(this.geos, 'reset change:value', this.render);
+    this.listenTo(this.geos, 'reset change', this.render);
     this.listenTo(this.fills, 'add remove change', this.render);
+    this.listenTo(this.strokes, 'add remove change', this.render);
     this.listenTo(this.settings, 'change', this.render);
-  },
-
-  // Selects a plotted cohort color for a value:
-  // Cohorts use value fills and editorially defined comparison operators.
-  getCohortColor: function(value) {
-    var threshold = this.fills.find(function(t) {
-      var v = t.get('value');
-      var c = t.get('operator');
-      if (typeof v == 'number') {
-        // Numeric comparisons:
-        if (c === 'lt' && value < v) return true;
-        if (c === 'lte' && value <= v) return true;
-        if (c === 'eq' && value === v) return true;
-        if (c === 'gte' && value >= v) return true;
-        if (c === 'gt' && value > v) return true;
-      } else {
-        // Loose-typed value match:
-        if (value == v) return true;
-      }
-    }, this);
-
-    return threshold ? threshold.get('color') : this.settings.get('fillColor');
-  },
-
-  // Gets the interpolated heat color for a value:
-  // Heat interpolation calculates the midpoint color between two values.
-  getHeatColor: function(value) {
-    var low = this.fills.at(0);
-    var high = this.fills.at(1);
-
-    // Special-case out the color selection for out-of-range values:
-    if (!low || !high) return this.settings.get('fillColor');
-    else if (value < low.get('value')) return low.get('color');
-    else if (value > high.get('value')) return high.get('color');
-    
-    // Calculate midpoint percentage:
-    var lv = low.get('value');
-    var hv = high.get('value');
-    var perc = (value - lv) / (hv - lv);
-
-    // Break out A components:
-    var a = low.get('color');
-    var ar = parseInt(a.substr(1, 2), 16);
-    var ag = parseInt(a.substr(3, 2), 16);
-    var ab = parseInt(a.substr(5, 2), 16);
-
-    // Break out B components:
-    var b = high.get('color');
-    var br = parseInt(b.substr(1, 2), 16);
-    var bg = parseInt(b.substr(3, 2), 16);
-    var bb = parseInt(b.substr(5, 2), 16);
-
-    // Interpolate midpoints:
-    var cr = Math.round(ar + (br - ar) * perc);
-    var cg = Math.round(ag + (bg - ag) * perc);
-    var cb = Math.round(ab + (bb - ab) * perc);
-
-    return 'rgb('+ cr +','+ cg +','+ cb +')';
   },
 
   // Gets the paint color for a value:
@@ -84,13 +27,15 @@ Mapper.views.MapRenderView = Backbone.View.extend({
     return this.settings.get('heatScale') ? this.getHeatColor(value) : this.getCohortColor(value);
   },
 
-  render: function() {
+  render: _.debounce(function() {
     this.renderMap();
     this.renderLegend();
     this.renderTitle();
     this.renderSave();
-  },
+  }, 10),
 
+  // Gets a tooltip templating function:
+  // this swaps in fancy {{ var }} field parsing for easier use.
   getTooltip: function() {
     var templateSettings = _.templateSettings
     _.templateSettings = {interpolate: /\{\{(.+?)\}\}/g};
@@ -112,9 +57,9 @@ Mapper.views.MapRenderView = Backbone.View.extend({
     this.geos.each(function(geo) {
       if (!geo.shape) geo.shape = document.createElementNS(this.SVG_NS, 'path');
       geo.shape.setAttribute('d', geo.get('shape'));
-      geo.shape.setAttribute('fill', this.getColor(geo.get('value')));
-      geo.shape.setAttribute('stroke', this.settings.get('strokeColor'));
-      geo.shape.setAttribute('stroke-width', '1');
+      geo.shape.setAttribute('fill', geo.getFillColor());
+      geo.shape.setAttribute('stroke', geo.getStrokeColor());
+      geo.shape.setAttribute('stroke-width', geo.getStrokeSize());
       geo.shape.setAttribute('data-tooltip', tooltip(geo.attributes));
       this.gMap.appendChild(geo.shape);
     }, this);

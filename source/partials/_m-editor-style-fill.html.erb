@@ -1,6 +1,12 @@
 <div id="editor-style-fill" class="m-editor__module">
   <header>
-    <h1>Fills</h1>
+    <h1 class="m-editor__field">Fills</h1>
+    <div class="m-editor__field">
+      <label for="style-fill-data">column:</label>
+      <select id="style-fill-data" data-bind="options:fields,value:fillField">
+        <option value="value">value</option>
+      </select>
+    </div>
     <button id="style-fill-add" class="m-editor__util m-editor-style__add">+</button>
   </header>
   <table class="style-form">
@@ -21,7 +27,7 @@
       <td><span class="swatch" data-bind="css:{'background-color':color}"><input type="checkbox" data-bind="checked:inLegend"></span></td>
       <td><input type="text" name="label" data-bind="value:label"></td>
       <td><input type="text" name="color" data-bind="value:color"></td>
-      <td><input type="number" name="value" data-bind="value:integer(value)"></td>
+      <td><input type="text" name="value" data-bind="value:value"></td>
       <td>
         <select data-bind="value:operator">
           <option value="lt">&lt;</option>

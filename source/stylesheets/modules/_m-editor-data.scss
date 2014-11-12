@@ -57,6 +57,11 @@ $m: '.m-editor-data';
 
   th {
     font-weight: bold;
+    vertical-align: top;
+
+    select {
+      display: block;
+    }
   }
 
   input {

@@ -5,8 +5,8 @@ var Mapper = {
   init: function() {
     this.settings = new this.models.Settings();
     this.geos = new this.models.Geographies();
-    this.fills = new this.models.Fills();
-    this.strokes = new this.models.Strokes();
+    this.fills = new this.models.Styles();
+    this.strokes = new this.models.Styles();
     
     var editorMain = new this.views.EditorMainView();
 

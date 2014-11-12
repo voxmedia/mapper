@@ -1,6 +1,12 @@
 <div id="editor-style-stroke" class="m-editor__module">
   <header>
-    <h1>Strokes</h1>
+    <h1 class="m-editor__field">Strokes</h1>
+    <div class="m-editor__field">
+      <label for="style-stroke-data">column:</label>
+      <select id="style-stroke-data" data-bind="options:fields,value:strokeField">
+        <option value="value">value</option>
+      </select>
+    </div>
     <button id="style-stroke-add" class="m-editor__util m-editor-style__add">+</button>
   </header>
   <table class="style-form">
@@ -23,7 +29,7 @@
       <td><input type="text" name="label" data-bind="value:label"></td>
       <td><input type="text" name="size" data-bind="value:size"></td>
       <td><input type="text" name="color" data-bind="value:color"></td>
-      <td><input type="number" name="value" data-bind="value:integer(value)"></td>
+      <td><input type="text" name="value" data-bind="value:value"></td>
       <td>
         <select data-bind="value:operator">
           <option value="lt">&lt;</option>

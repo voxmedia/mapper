@@ -1,17 +1,18 @@
 (function() {
 
-  var Fill = Backbone.Model.extend({
+  var Style = Backbone.Model.extend({
     defaults: {
       color: '#000000',
       inLegend: true,
       label: 'New legend item',
       operator: 'lte',
+      size: 3,
       value: 0
     }
   });
 
-  Mapper.models.Fills = Backbone.Collection.extend({
-    model: Fill,
+  Mapper.models.Styles = Backbone.Collection.extend({
+    model: Style,
     comparator: 'value',
 
     initialize: function() {
@@ -19,7 +20,7 @@
     },
 
     newItem: function() {
-      this.add(Fill.prototype.defaults);
+      this.add(Style.prototype.defaults);
     }
   });
 

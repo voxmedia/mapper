@@ -8,9 +8,12 @@ $m: '.m-editor';
     padding: 5px 15px;
   }
 
-  h1 {
+  #{$m}__field {
     float: left;
+    height: 100%;
     margin: 0;
+    margin-right: 20px;
+    vertical-align: middle;
   }
 
   #{$m}__util {
@@ -22,7 +25,7 @@ $m: '.m-editor';
   }
 
   #{$m}__module {
-    margin-bottom: 20px;
+    margin-bottom: 50px;
   }
 
   .row {

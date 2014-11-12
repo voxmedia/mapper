@@ -1,25 +1,43 @@
 
 // Map data form view (with drag-and-drop CSV)
-
-Mapper.views.MapDataView
-
 Mapper.views.MapDataView = Backbone.View.extend({
   el: '#editor-data',
 
   initialize: function() {
     this.listenTo(this.collection, 'reset', this.render);
-    this.listenTo(this.collection, 'change:value', this.renderRange);
+    this.listenTo(this.collection, 'change', this.renderRange);
   },
 
-  render: function() {
-    var fields = this.collection.getFields();
-    var head = '<th>id</th>';
-    var body = '';
+  // Create function to build data-type select menu:
+  // (kinda gross, I know...)
+  renderTypeSelect: function(fieldName) {
+    var opts = ['<select name="',fieldName,'">'];
+    var fieldType = this.collection.getFieldType(fieldName);
 
-    _.each(fields, function(field) {
-      head += '<th>'+field+'</th>';
+    // Build an option for each datatype:
+    _.each(['number', 'string', 'boolean'], function(type) {
+      opts.push('<option value="',type,'"');
+      if (type === fieldType) opts.push(' selected="selected"');
+      opts.push('>',type,'</option>');
     });
 
+    opts.push('</select>');
+    return opts.join('');
+  },
+
+  // Renders all data into the grid:
+  render: function() {
+    var fields = _.without(this.model.get('fields'), 'id');
+    var head = '<th>id</th>';
+    var body = '';
+    var self = this;
+
+    // Build table header row:
+    _.each(fields, function(field) {
+      head += '<th>'+ field + this.renderTypeSelect(field) +'</th>';
+    }, this);
+
+    // Build all table body rows:
     this.collection.each(function(geo) {
       var row = ['<tr><td>',geo.id.toUpperCase(),'</td>'];
 
@@ -31,6 +49,7 @@ Mapper.views.MapDataView = Backbone.View.extend({
       body += row.join('');
     }, this);
 
+    // Populate table head and body:
     this.$('thead').html('<tr>'+head+'</tr>');
     this.$('tbody').html(body);
     this.renderRange();
@@ -53,17 +72,20 @@ Mapper.views.MapDataView = Backbone.View.extend({
 
   events: {
     'change input': 'onValue',
+    'change select': 'onDataType',
     'dragover #data-dropzone': 'onZoneOver',
     'dragleave #data-dropzone': 'onZoneOut',
     'drop #data-dropzone': 'onZoneDrop'
   },
 
+  // Collection data-transfer settings from event object:
   getDataTransfer: function(evt) {
     evt.stopPropagation();
     evt.preventDefault();
     return evt.originalEvent.dataTransfer || null;
   },
 
+  // Triggered when dragging file over the CSV zone:
   onZoneOver: function(evt) {
     var dataTransfer = this.getDataTransfer(evt);
     if (dataTransfer) {
@@ -72,10 +94,12 @@ Mapper.views.MapDataView = Backbone.View.extend({
     }
   },
 
+  // Triggered when dragging a file out of CSV zone:
   onZoneOut: function(evt) {
     this.$('#data-dropzone').removeClass('pulse');
   },
 
+  // Triggered when dropping a file on the CSV zone:
   onZoneDrop: function(evt) {
     var dataTransfer = this.getDataTransfer(evt);
     if (dataTransfer && dataTransfer.files.length) {
@@ -84,9 +108,16 @@ Mapper.views.MapDataView = Backbone.View.extend({
     }
   },
 
+  // Sets a value for a record field:
   onValue: function(evt) {
     var $field = this.$(evt.currentTarget);
     var geo = this.collection.get($field.attr('data-id'));
     if (geo) geo.set($field.attr('name'), $field.val());
+  },
+
+  // Sets the datatype associated with a column:
+  onDataType: function(evt) {
+    var $field = this.$(evt.currentTarget);
+    this.collection.setFieldType($field.attr('name'), $field.val());
   }
 });
