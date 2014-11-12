@@ -4,7 +4,7 @@ var Mapper = {
 
   init: function() {
     this.settings = new this.models.Settings();
-    this.geos = new this.models.Geographies();
+    this.data = new this.models.Data();
     this.fills = new this.models.Styles();
     this.strokes = new this.models.Styles();
     
@@ -28,8 +28,8 @@ var Mapper = {
       model: this.settings
     });
     
-    var editorData = new this.views.MapDataView({
-      collection: this.geos,
+    var editorData = new this.views.EditorDataView({
+      collection: this.data,
       model: this.settings
     });
 
@@ -37,7 +37,7 @@ var Mapper = {
       settings: this.settings,
       fills: this.fills,
       strokes: this.strokes,
-      geos: this.geos
+      data: this.data
     });
 
     this.fills.reset([
@@ -45,6 +45,6 @@ var Mapper = {
       {value: 100, color: '#fa4b2a', label: 'Reads Verge'}
     ]);
 
-    this.geos.seed(MapData);
+    this.data.seed(MapData);
   }
 };

@@ -1,6 +1,6 @@
 
 // Map data form view (with drag-and-drop CSV)
-Mapper.views.MapDataView = Backbone.View.extend({
+Mapper.views.EditorDataView = Backbone.View.extend({
   el: '#editor-data',
 
   initialize: function() {

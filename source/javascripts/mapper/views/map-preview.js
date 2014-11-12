@@ -3,6 +3,7 @@
 Mapper.views.MapRenderView = Backbone.View.extend({
   SVG_NS: 'http://www.w3.org/2000/svg',
   el: '#map-preview',
+  //_paths: {},
 
   initialize: function(options) {
     _.extend(this, options);
@@ -15,7 +16,7 @@ Mapper.views.MapRenderView = Backbone.View.extend({
     this.$el.append(svg);
     this.save = new Image();
 
-    this.listenTo(this.geos, 'reset change', this.render);
+    this.listenTo(this.data, 'reset change', this.render);
     this.listenTo(this.fills, 'add remove change', this.render);
     this.listenTo(this.strokes, 'add remove change', this.render);
     this.listenTo(this.settings, 'change', this.render);
@@ -54,7 +55,7 @@ Mapper.views.MapRenderView = Backbone.View.extend({
     var tooltip = this.getTooltip();
 
     // Add all geography shapes:
-    var shapes = this.geos.map(function(dat) {
+    var shapes = this.data.map(function(dat) {
       if (!dat.shape) dat.shape = document.createElementNS(this.SVG_NS, 'path');
       dat.shape.setAttribute('d', dat.get('shape'));
       dat.shape.setAttribute('fill', dat.getFillColor());

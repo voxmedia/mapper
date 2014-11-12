@@ -136,10 +136,10 @@
     }
   });
 
-  // Geographies collection:
+  // Data collection:
   // manages a collection of geographies,
   // and manages the definition of their field data types.
-  Mapper.models.Geographies = Backbone.Collection.extend({
+  Mapper.models.Data = Backbone.Collection.extend({
     model: Datum,
     comparator: 'id',
     _datatypes: {},
@@ -173,20 +173,36 @@
       });
     },
 
+    detectType: function(s) {
+      var key;
+
+      // Check for un-determinable string values:
+      if (typeof s === 'string') {
+        if (s === '' || s.toLowerCase() === 'null') return null;
+      }
+
+      // Try to cast it to a number:
+      if ((key = +s) == key) return 'number';
+
+      // Check for string with length:
+      if (String(s).length) return 'string';
+
+      // Give up:
+      return null;
+    },
+
     // Gets a datatype for the specified field name:
     getFieldType: function(fieldName) {
       // Look for cached field type:
-      for (var key in this._datatypes) {
-        if (fieldName === key) return this._datatypes[key];
-      }
+      var dataType = this._datatypes[fieldName];
+      if (dataType) return dataType;
 
       // If no cached datatype was found,
       // then we'll need to look up the type and commit it to the cache:
-      var dataType;
 
       // Look through data set until a conclusive value is found:
       for (var i = 0; i < this.length; i++) {
-        dataType = DataType.detect(this.at(i).attributes[fieldName]);
+        dataType = this.detectType(this.at(i).attributes[fieldName]);
         if (dataType !== null) break;
       }
 

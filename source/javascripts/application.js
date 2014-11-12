@@ -6,10 +6,9 @@
 
 //= require "mapper/mapdata"
 //= require "mapper/main"
-//= require "mapper/models/datatype"
 //= require "mapper/models/settings"
 //= require "mapper/models/styles"
-//= require "mapper/models/geographies"
+//= require "mapper/models/data"
 
 //= require "mapper/views/map-preview"
 //= require "mapper/views/editor-data"
