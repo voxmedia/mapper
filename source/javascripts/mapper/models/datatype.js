@@ -2,11 +2,6 @@ var DataType = {
   detect: (function() {
 
     var common_strings = {
-      'TRUE': 'boolean',
-      'true': 'boolean',
-      'FALSE': 'boolean',
-      'false': 'boolean',
-      'NaN': 'number',
       'NULL': null,
       'null': null,
       '': null
@@ -30,13 +25,5 @@ var DataType = {
       return null;
     };
 
-  }()),
-
-  cast: function(value, dataType) {
-    switch (dataType) {
-      case 'number': return +value;
-      case 'string': return value;
-      case 'boolean': return (value && value.toLowerCase() !== 'false')
-    }
-  }
+  }())
 };

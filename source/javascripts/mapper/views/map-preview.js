@@ -54,14 +54,26 @@ Mapper.views.MapRenderView = Backbone.View.extend({
     var tooltip = this.getTooltip();
 
     // Add all geography shapes:
-    this.geos.each(function(geo) {
-      if (!geo.shape) geo.shape = document.createElementNS(this.SVG_NS, 'path');
-      geo.shape.setAttribute('d', geo.get('shape'));
-      geo.shape.setAttribute('fill', geo.getFillColor());
-      geo.shape.setAttribute('stroke', geo.getStrokeColor());
-      geo.shape.setAttribute('stroke-width', geo.getStrokeSize());
-      geo.shape.setAttribute('data-tooltip', tooltip(geo.attributes));
-      this.gMap.appendChild(geo.shape);
+    var shapes = this.geos.map(function(dat) {
+      if (!dat.shape) dat.shape = document.createElementNS(this.SVG_NS, 'path');
+      dat.shape.setAttribute('d', dat.get('shape'));
+      dat.shape.setAttribute('fill', dat.getFillColor());
+      dat.shape.setAttribute('stroke', dat.getStrokeColor());
+      dat.shape.setAttribute('stroke-width', dat.getStrokeSize());
+      dat.shape.setAttribute('data-tooltip', tooltip(dat.attributes));
+      return dat.shape;
+    }, this);
+
+    // Sort based on stroke weight (thickest goes last):
+    shapes.sort(function(a, b) {
+      var a = +a.getAttributeNS(null, 'stroke-width');
+      var b = +b.getAttributeNS(null, 'stroke-width');
+      return a - b;
+    });
+
+    // Append map shapes in order of stroke weight:
+    _.each(shapes, function(shape) {
+      this.gMap.appendChild(shape);
     }, this);
 
     // Append new map graphic to SVG:

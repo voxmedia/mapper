@@ -15,7 +15,7 @@ Mapper.views.MapDataView = Backbone.View.extend({
     var fieldType = this.collection.getFieldType(fieldName);
 
     // Build an option for each datatype:
-    _.each(['number', 'string', 'boolean'], function(type) {
+    _.each(['number', 'string'], function(type) {
       opts.push('<option value="',type,'"');
       if (type === fieldType) opts.push(' selected="selected"');
       opts.push('>',type,'</option>');

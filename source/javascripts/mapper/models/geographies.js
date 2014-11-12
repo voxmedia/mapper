@@ -1,29 +1,38 @@
 (function() {
   
-  // GeoStyleMapper:
+  // DataStyleMapper:
   // This guy knows how all the data works together.
   // A data reader is pre-configured with the all fields its going to work with,
   // then presented with a geography, it reads out its data configuration...
   // Kind of an IOC on object-orientation, where the process is specialized rather than the object.
-  var GeoStyleMapper = {
+  var DataStyleMapper = {
+    val: function(value) {
+      switch (this.dataType) {
+        case 'number': return value === '' ? null : Number(value);
+        case 'string': return String(value);
+      }
+    },
+
     // Selects a plotted cohort color for a value:
     // Cohorts use value fills and editorially defined comparison operators.
     getCohortData: function(value) {
-      var cohort = this.collection.find(function(t) {
-        var v = t.get('value');
-        var c = t.get('operator');
-        if (typeof v == 'number') {
-          // Numeric comparisons:
+      // Parse the data value:
+      value = this.val(value);
+
+      // IMPORTANT: if a field specifically evals as NULL, then skip it.
+      // This differentiates between no-data, and falsey values.
+      if (value !== null) {
+        // If we got a valid value, then proceed to match a cohort:
+        var cohort = this.styles.find(function(t) {
+          var v = this.val(t.get('value'));
+          var c = t.get('operator');
           if (c === 'lt' && value < v) return true;
           if (c === 'lte' && value <= v) return true;
           if (c === 'eq' && value === v) return true;
           if (c === 'gte' && value >= v) return true;
           if (c === 'gt' && value > v) return true;
-        } else {
-          // Loose-typed value match:
-          if (value == v) return true;
-        }
-      }, this);
+        }, this);
+      }
 
       return cohort ? cohort.get(this.styleField) : this.settings.get(this.defaultField);
     },
@@ -48,16 +57,16 @@
     // Gets the interpolated heat color for a value:
     // Heat interpolation calculates the midpoint color between two values.
     getHeatColor: function(value) {
-      var low = this.collection.at(0);
-      var high = this.collection.at(1);
+      var low = this.styles.at(0);
+      var high = this.styles.at(1);
 
       // Special-case out the color selection for out-of-range values:
       if (!low || !high || value === '') return this.settings.get(this.defaultField);
 
       // Force numeric types:
-      value = +value;
-      var lv = +low.get('value');
-      var hv = +high.get('value');
+      value = this.val(value);
+      var lv = this.val(low.get('value'));
+      var hv = this.val(high.get('value'));
 
       // Cap ends of range:
       if (value < lv) return low.get('color');
@@ -73,10 +82,10 @@
       var cg = Math.round(a[1] + (b[1] - a[1]) * perc);
       var cb = Math.round(a[2] + (b[2] - a[2]) * perc);
 
-      return 'rgb('+ cr +','+ cg +','+ cb +')';
+      return ['rgb(',cr,',',cg,',',cb,')'].join('');
     },
 
-    map: function(geo, styleGroup, field) {
+    map: function(dat, styleGroup, field) {
       // Store the name of the base field this will pick from:
       this.styleField = field;
 
@@ -86,14 +95,14 @@
 
       // Create local aliases to model data:
       this.settings = Mapper.settings;
-      this.collection = Mapper[styleGroup+'s'];
+      this.styles = Mapper[styleGroup+'s'];
 
       // Get the data value in question from the geography:
       var dataField = this.settings.get(styleGroup+'Field');
-      var value = geo.get(dataField);
+      var value = dat.get(dataField);
 
       // Lookup the requested field's dataType:
-      this.dataType = geo.collection.getFieldType(dataField);
+      this.dataType = dat.collection.getFieldType(dataField);
 
       // Render heat scale (when enabled) for color settings:
       if (field === 'color' && this.dataType === 'number' && this.settings.get('heatScale')) {
@@ -105,25 +114,25 @@
     }
   };
 
-  // Individual Geography model:
+  // Individual Datum model:
   // will be extended with shape data, and any CSV imports:
   // provides an object-oriented API for accessing its own style data.
-  var Geography = Backbone.Model.extend({
+  var Datum = Backbone.Model.extend({
     defaults: {
       id: '',
       value: 0
     },
 
     getFillColor: function() {
-      return GeoStyleMapper.map(this, 'fill', 'color');
+      return DataStyleMapper.map(this, 'fill', 'color');
     },
 
     getStrokeColor: function() {
-      return GeoStyleMapper.map(this, 'stroke', 'color');
+      return DataStyleMapper.map(this, 'stroke', 'color');
     },
 
     getStrokeSize: function() {
-      return GeoStyleMapper.map(this, 'stroke', 'size');
+      return DataStyleMapper.map(this, 'stroke', 'size');
     }
   });
 
@@ -131,7 +140,7 @@
   // manages a collection of geographies,
   // and manages the definition of their field data types.
   Mapper.models.Geographies = Backbone.Collection.extend({
-    model: Geography,
+    model: Datum,
     comparator: 'id',
     _datatypes: {},
 
@@ -190,7 +199,7 @@
     // field types are cached for quick reference.
     setFieldType: function(fieldName, dataType, options) {
       this._datatypes[fieldName] = dataType;
-      if (!options || !options.silent) this.trigger('change:value');
+      if (!options || !options.silent) this.trigger('change');
       return dataType;
     }
   });
