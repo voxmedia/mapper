@@ -9,5 +9,12 @@
       <tbody></tbody>
     </table>
   </div>
-  <div id="data-range" class="m-editor-data__range"></div>
+  <script type="text/template" id="editor-data-row">
+    <tr>
+      <td><%%= d.model.id.toUpperCase() %></td>
+      <%% _.each(d.fields, function(field) { %>
+      <td><input type="text" name="<%%= field %>" value="<%%= d.model.get(field) %>" data-id="<%%= d.model.id %>"></td>
+      <%% }) %>
+    </tr>
+  </script>
 </section>

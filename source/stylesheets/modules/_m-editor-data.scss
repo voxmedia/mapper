@@ -13,6 +13,29 @@ $m: '.m-editor-data';
     font-family: $balto;
     font-size: 15px;
   }
+
+  a.sort {
+    color: black;
+    cursor: pointer;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    /*&:after {
+      border: 5px solid transparent;
+      border-bottom: none;
+      border-top-color: $gray-medium;
+      content: '';
+      display: inline-block;
+      height: 0;
+      margin-left: 6px;
+      position: absolute;
+      right: 10px;
+      top: 10px;
+      width: 0;
+    }*/
+  }
 }
 
 #{$m}__dropzone {
@@ -34,7 +57,7 @@ $m: '.m-editor-data';
 
 #{$m}__table {
   border: 1px solid $gray-medium;
-  height: calc(100% - 60px);
+  height: calc(100% - 35px);
   margin: 0;
   padding: 0;
   position: relative;
@@ -57,6 +80,7 @@ $m: '.m-editor-data';
 
   th {
     font-weight: bold;
+    position: relative;
     vertical-align: top;
 
     select {
@@ -70,18 +94,5 @@ $m: '.m-editor-data';
     height: 100%;
     padding: 0;
     width: 100%;
-  }
-}
-
-#{$m}__range {
-  background-color: $gray-dark;
-  color: white;
-  font-style: italic;
-  height: 25px;
-  line-height: 25px;
-  padding: 0 15px;
-
-  b {
-    font-weight: bold;
   }
 }

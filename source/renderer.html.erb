@@ -1,0 +1,33 @@
+<style>
+path {
+  fill: #ccc;
+  stroke: #fff;
+  stroke-width: .5px;
+  stroke-linejoin: round;
+}
+</style>
+
+
+<div id="mapper-12345"></div>
+<%= javascript_include_tag 'renderer' %>
+
+<script>
+var mapper = new MapRender({
+  el: 'mapper-12345',
+  type: 'us-states',
+  csv: 'data/states.csv',
+  csvParser: function(d) {
+    return {
+      id: d.id,
+      value: d.value ? +d.value : d.value,
+      puppies: d.puppies ? +d.puppies : d.puppies,
+      kittens: d.kittens ? +d.kittens : d.kittens,
+      sunshine: d.sunshine
+    };
+  },
+  styles: [
+    {type: 'fill', column: 'puppies', color: '#000', value: 25, op: 'lte'},
+    {type: 'fill', column: 'puppies', color: '#000', value: 25, op: 'lte'}
+  ]
+});
+</script>

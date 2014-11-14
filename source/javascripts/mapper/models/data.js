@@ -1,11 +1,11 @@
 (function() {
   
-  // DataStyleMapper:
+  // DataFormatter:
   // This guy knows how all the data works together.
   // A data reader is pre-configured with the all fields its going to work with,
   // then presented with a geography, it reads out its data configuration...
   // Kind of an IOC on object-orientation, where the process is specialized rather than the object.
-  var DataStyleMapper = {
+  var DataFormatter = {
     val: function(value) {
       switch (this.dataType) {
         case 'number': return value === '' ? null : Number(value);
@@ -91,21 +91,21 @@
 
       // Create the field names that this will reference out of settings:
       // Default settings value: desolves as "fillColor" or "strokeSize"
-      this.defaultField = styleGroup+field.replace(/^./, function(m) { return m.toUpperCase(); });
+      this.defaultField = styleGroup+'_'+field;
 
       // Create local aliases to model data:
       this.settings = Mapper.settings;
       this.styles = Mapper[styleGroup+'s'];
 
       // Get the data value in question from the geography:
-      var dataField = this.settings.get(styleGroup+'Field');
+      var dataField = this.settings.get(styleGroup+'_column');
       var value = dat.get(dataField);
 
       // Lookup the requested field's dataType:
-      this.dataType = dat.collection.getFieldType(dataField);
+      this.dataType = this.settings.columnType(dataField);
 
       // Render heat scale (when enabled) for color settings:
-      if (field === 'color' && this.dataType === 'number' && this.settings.get('heatScale')) {
+      if (field === 'color' && this.dataType === 'number' && this.settings.get('heat_scale')) {
         return this.getHeatColor(value);
       }
 
@@ -124,15 +124,15 @@
     },
 
     getFillColor: function() {
-      return DataStyleMapper.map(this, 'fill', 'color');
+      return DataFormatter.map(this, 'fill', 'color');
     },
 
     getStrokeColor: function() {
-      return DataStyleMapper.map(this, 'stroke', 'color');
+      return DataFormatter.map(this, 'stroke', 'color');
     },
 
     getStrokeSize: function() {
-      return DataStyleMapper.map(this, 'stroke', 'size');
+      return DataFormatter.map(this, 'stroke', 'size');
     }
   });
 
@@ -142,7 +142,35 @@
   Mapper.models.Data = Backbone.Collection.extend({
     model: Datum,
     comparator: 'id',
-    _datatypes: {},
+    _sort: {},
+
+    // Custom method for column-type aware sorting:
+    sort: function() {
+      var self = this;
+      DataFormatter.dataType = Mapper.settings.columnType(this.comparator);
+
+      this.models.sort(function(a, b) {
+        var va = DataFormatter.val(a.get(self.comparator));
+        var vb = DataFormatter.val(b.get(self.comparator));
+        var diff;
+
+        // Primary sort on column value:
+        if (DataFormatter.dataType === 'string') {
+          diff = va.localeCompare(vb);
+        } else {
+          diff = va - vb;
+        }
+
+        // Secondary sort on id:
+        if (diff === 0) {
+          return a.id.localeCompare(b.id);
+        }
+
+        return diff;
+      });
+
+      this.trigger('sort');
+    },
 
     seed: function(data) {
       var models = [];
@@ -158,65 +186,67 @@
     },
 
     loadCSV: function(file) {
-      Papa.parse(file, {
-        header: true,
-        complete: _.bind(function(result) {
-          if (result.errors.length) {
-            return alert('An error occured while parsing this CSV.');
+      var reader = new FileReader();
+
+      reader.onload = _.bind(function() {
+        var data = d3.csv.parse(reader.result);
+        if (data.length) {
+          this._datatypes = {};
+          this.reset(data, {silent: true});
+          Mapper.settings.set('columns', this.getColumns());
+          this.trigger('reset change');
+        }
+      }, this);
+
+      reader.readAsText(file);
+    },
+
+    // Gets an object with all columns and their data types.
+    // Returns as {col1:'string', col2:'number'}
+    getColumns: function() {
+      // Function used to detect known data types:
+      // We're deliberately returning null if we can't make a good assessment of a value.
+      function detectType(s) {
+        var key;
+
+        // Check for un-determinable string values:
+        if (typeof s === 'string') {
+          if (s === '' || s.toLowerCase() === 'null') return null;
+        }
+
+        // Try to cast it to a number:
+        if ((key = +s) == key) return 'number';
+
+        // Check for string with length:
+        if (String(s).length) return 'string';
+
+        // Give up:
+        return null;
+      }
+
+      // Return empty if there is no data:
+      if (!this.length) return {};
+
+      // Clone first row for the column set:
+      var columns = this.at(0).toJSON();
+
+      // Loop through all columns, and detect a datatype for each.
+      // We'll keep looking through rows until we find an assessable value for each column.
+      // Columns with no assessable values will be left as strings.
+      for (var column in columns) {
+        if (columns.hasOwnProperty(column)) {
+          var type;
+
+          for (var i = 0; i < this.length; i++) {
+            type = detectType(this.at(i).attributes[column]);
+            if (type) break;
           }
 
-          this._datatypes = {};
-          Mapper.settings.set('fields', result.meta.fields);
-          this.set(result.data, {silent: true});
-          this.trigger('reset change');
-        }, this)
-      });
-    },
-
-    detectType: function(s) {
-      var key;
-
-      // Check for un-determinable string values:
-      if (typeof s === 'string') {
-        if (s === '' || s.toLowerCase() === 'null') return null;
+          columns[column] = type || 'string';
+        }
       }
 
-      // Try to cast it to a number:
-      if ((key = +s) == key) return 'number';
-
-      // Check for string with length:
-      if (String(s).length) return 'string';
-
-      // Give up:
-      return null;
-    },
-
-    // Gets a datatype for the specified field name:
-    getFieldType: function(fieldName) {
-      // Look for cached field type:
-      var dataType = this._datatypes[fieldName];
-      if (dataType) return dataType;
-
-      // If no cached datatype was found,
-      // then we'll need to look up the type and commit it to the cache:
-
-      // Look through data set until a conclusive value is found:
-      for (var i = 0; i < this.length; i++) {
-        dataType = this.detectType(this.at(i).attributes[fieldName]);
-        if (dataType !== null) break;
-      }
-
-      // Set inconclusive types to strings:
-      if (dataType === null) dataType = 'string';
-      return this.setFieldType(fieldName, dataType, {silent: true});
-    },
-
-    // Sets a datatype for the specified field name:
-    // field types are cached for quick reference.
-    setFieldType: function(fieldName, dataType, options) {
-      this._datatypes[fieldName] = dataType;
-      if (!options || !options.silent) this.trigger('change');
-      return dataType;
+      return columns;
     }
   });
 

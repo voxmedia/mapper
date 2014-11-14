@@ -1,10 +1,10 @@
-
 // Map data form view (with drag-and-drop CSV)
 Mapper.views.EditorDataView = Backbone.View.extend({
   el: '#editor-data',
+  rowTmpl: _.template($('#editor-data-row').html(), {variable: 'd'}),
 
   initialize: function() {
-    this.listenTo(this.collection, 'reset', this.render);
+    this.listenTo(this.collection, 'reset sort', this.render);
     this.listenTo(this.collection, 'change', this.renderRange);
   },
 
@@ -12,7 +12,7 @@ Mapper.views.EditorDataView = Backbone.View.extend({
   // (kinda gross, I know...)
   renderTypeSelect: function(fieldName) {
     var opts = ['<select name="',fieldName,'">'];
-    var fieldType = this.collection.getFieldType(fieldName);
+    var fieldType = this.model.columnType(fieldName);
 
     // Build an option for each datatype:
     _.each(['number', 'string'], function(type) {
@@ -26,34 +26,26 @@ Mapper.views.EditorDataView = Backbone.View.extend({
   },
 
   // Renders all data into the grid:
-  render: function() {
-    var fields = _.without(this.model.get('fields'), 'id');
-    var head = '<th>id</th>';
-    var body = '';
+  render: _.debounce(function() {
+    var fields = _.without(this.model.get('columnNames'), 'id');
+    var head = '<th><a class="sort">id</a></th>';
     var self = this;
 
     // Build table header row:
     _.each(fields, function(field) {
-      head += '<th>'+ field + this.renderTypeSelect(field) +'</th>';
+      head += '<th><a class="sort">'+ field +'</a>'+ this.renderTypeSelect(field) +'</th>';
     }, this);
 
     // Build all table body rows:
-    this.collection.each(function(geo) {
-      var row = ['<tr><td>',geo.id.toUpperCase(),'</td>'];
-
-      for (var i=0; i < fields.length; i++) {
-        row.push('<td><input type="text" name="',fields[i],'" value="',geo.get(fields[i]),'" data-id="'+geo.id+'"></td>');
-      }
-      
-      row.push('</tr>');
-      body += row.join('');
-    }, this);
+    var body = this.collection.reduce(function(memo, model) {
+      return memo += this.rowTmpl({fields: fields, model: model});
+    }, '', this);
 
     // Populate table head and body:
     this.$('thead').html('<tr>'+head+'</tr>');
     this.$('tbody').html(body);
     this.renderRange();
-  },
+  }, 5),
 
   renderRange: function() {
     var min = Infinity;
@@ -71,6 +63,7 @@ Mapper.views.EditorDataView = Backbone.View.extend({
   },
 
   events: {
+    'click a.sort': 'onSort',
     'change input': 'onValue',
     'change select': 'onDataType',
     'dragover #data-dropzone': 'onZoneOver',
@@ -108,6 +101,11 @@ Mapper.views.EditorDataView = Backbone.View.extend({
     }
   },
 
+  onSort: function(evt) {
+    this.collection.comparator = this.$(evt.target).text();
+    this.collection.sort();
+  },
+
   // Sets a value for a record field:
   onValue: function(evt) {
     var $field = this.$(evt.currentTarget);
@@ -118,6 +116,6 @@ Mapper.views.EditorDataView = Backbone.View.extend({
   // Sets the datatype associated with a column:
   onDataType: function(evt) {
     var $field = this.$(evt.currentTarget);
-    this.collection.setFieldType($field.attr('name'), $field.val());
+    this.model.columnType($field.attr('name'), $field.val());
   }
 });

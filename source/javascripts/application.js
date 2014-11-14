@@ -2,7 +2,6 @@
 //= require "vendor/underscore"
 //= require "vendor/backbone"
 //= require "vendor/backbone.epoxy"
-//= require "vendor/papaparse"
 
 //= require "mapper/mapdata"
 //= require "mapper/main"
