@@ -1,6 +1,26 @@
 // Map renderer:
 
 Mapper.views.MapRenderView = Backbone.View.extend({
+  el: '#map-preview',
+  initialize: function(opts) {
+    _.extend(this, opts);
+    this.$el.attr('id', this.settings.get('el'));
+    this.renderer = new MapRenderer();
+
+    this.listenTo(this.data, 'reset change', this.render);
+    this.listenTo(this.fills, 'add remove change', this.render);
+    this.listenTo(this.strokes, 'add remove change', this.render);
+    this.listenTo(this.settings, 'change', this.render);
+    this.render();
+  },
+
+  render: _.debounce(function() {
+    this.renderer.render(Mapper.getRenderConfig());
+  }, 10)
+});
+
+/*
+Mapper.views.MapRenderView = Backbone.View.extend({
   SVG_NS: 'http://www.w3.org/2000/svg',
   el: '#map-preview',
 
@@ -13,6 +33,10 @@ Mapper.views.MapRenderView = Backbone.View.extend({
     svg.setAttribute('viewBox', '0 0 950 600');
     svg.setAttribute('width', '100%');
     this.$el.append(svg);
+    this.$el.attr('id', this.settings.get('el'));
+
+    this.renderer = new MapRenderer(Mapper.getRenderConfig());
+
     this.save = new Image();
 
     this.listenTo(this.data, 'reset change', this.render);
@@ -141,4 +165,4 @@ Mapper.views.MapRenderView = Backbone.View.extend({
     var svg = unescape(encodeURIComponent(this.el.innerHTML));
     $('#save-image').attr('href', 'data:image/svg+xml;base64,'+window.btoa(svg));
   }
-});
+});*/

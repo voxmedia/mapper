@@ -7,6 +7,7 @@
       label: 'New legend item',
       operator: 'lte',
       size: 3,
+      type: 'fill',
       value: 0
     }
   });
@@ -19,8 +20,8 @@
       this.listenTo(this, 'change:value', this.sort);
     },
 
-    newItem: function() {
-      this.add(Style.prototype.defaults);
+    newItem: function(opts) {
+      this.add(opts || {});
     }
   });
 

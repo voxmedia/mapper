@@ -24,7 +24,7 @@
     },
 
     onAdd: function() {
-      this.collection.newItem();
+      this.collection.newItem({type: 'stroke'});
     }
   });
 

@@ -3,7 +3,6 @@
 //= require "vendor/backbone"
 //= require "vendor/backbone.epoxy"
 
-//= require "mapper/mapdata"
 //= require "mapper/main"
 //= require "mapper/models/settings"
 //= require "mapper/models/styles"

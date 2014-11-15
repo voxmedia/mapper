@@ -45,6 +45,12 @@ var Mapper = {
       {value: 100, color: '#fa4b2a', label: 'Reads Verge'}
     ]);
 
-    this.data.seed(MapData);
+    window.onbeforeunload = function() {
+      //return "You are about to exit this layout.";
+    };
+  },
+
+  getRenderConfig: function() {
+    return this.settings.toJSON();
   }
 };
