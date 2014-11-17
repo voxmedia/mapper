@@ -7,12 +7,16 @@ Mapper.models.Settings = Backbone.Epoxy.Model.extend({
     fill_column: 'value',
     heat_clamp: true,
     heat_scale: false,
+    height: 500,
     type: 'us-state',
     title: 'My Awesome Map',
     tooltip: 'State {{ id }}: {{ value }}',
     stroke_color: 'rgba(255,255,255,0.25)',
     stroke_size: 1,
-    stroke_column: 'value'
+    stroke_column: 'value',
+    title_font: '24px "Balto", Helvetica',
+    legend_font: 'italic 14px "Balto", Helvetica',
+    width: 960
   },
 
   computeds: {

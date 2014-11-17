@@ -50,7 +50,10 @@ var Mapper = {
     };
   },
 
-  getRenderConfig: function() {
-    return this.settings.toJSON();
+  getRenderConfig: function(opts) {
+    var config = this.settings.toJSON();
+    config.styles = this.fills.toJSON().concat(this.strokes.toJSON());
+    if (opts && opts.rows) config.rows = this.data.toJSON();
+    return config;
   }
 };

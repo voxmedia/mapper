@@ -4,7 +4,7 @@ Mapper.views.MapRenderView = Backbone.View.extend({
   el: '#map-preview',
   initialize: function(opts) {
     _.extend(this, opts);
-    this.$el.attr('id', this.settings.get('el'));
+    this.$el.find('#map-renderer').attr('id', this.settings.get('el'));
     this.renderer = new MapRenderer();
 
     this.listenTo(this.data, 'reset change', this.render);
@@ -15,7 +15,7 @@ Mapper.views.MapRenderView = Backbone.View.extend({
   },
 
   render: _.debounce(function() {
-    this.renderer.render(Mapper.getRenderConfig());
+    this.renderer.init(Mapper.getRenderConfig({rows: true}));
   }, 10)
 });
 

@@ -1,1 +1,11 @@
-<div id="map-preview" class="m-map-preview map-view"></div>
+<div id="map-preview" class="m-editor m-map-preview map-view">
+  <header>
+    <h1 class="m-editor__field">Preview</h1>
+    <ul class="m-editor__util m-share">
+      <li><a href="#"><%= image_tag 'share-svg.png', :alt => 'SVG' %></a></li>
+      <li><a href="#"><%= image_tag 'share-png.png', :alt => 'PNG' %></a></li>
+      <li><a href="#"><%= image_tag 'share-embed.jpg', :alt => 'Embed' %></a></li>
+    </ul>
+  </header>
+  <div id="map-renderer"></div>
+</div>

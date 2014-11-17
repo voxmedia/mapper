@@ -2,16 +2,9 @@ $m: '.m-editor-data';
 
 #{$m} {
   background-color: white;
-  
-  header {
-    background-color: $gray-dark;
-    margin: 0;
-  }
 
-  h1 {
-    color: white;
-    font-family: $balto;
-    font-size: 15px;
+  header {
+    border-left: 1px solid tint($gray-dark, 10%);
   }
 
   a.sort {

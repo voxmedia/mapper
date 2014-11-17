@@ -2,10 +2,16 @@ $m: '.m-editor';
 
 #{$m} {
   header {
-    background-color: $gray-light;
+    background-color: $gray-dark;
+    color: white;
     height: 25px;
     line-height: 25px;
     padding: 5px 15px;
+
+    h1 {
+      font-family: $balto;
+      font-size: 16px;
+    }
   }
 
   #{$m}__field {
@@ -49,6 +55,11 @@ $m: '.m-editor';
   height: calc(100% - 35px);
   padding: 15px;
   overflow: auto;
+
+  header {
+    background-color: $gray-light;
+    color: black;
+  }
 }
 
 #{$m}__tabs {
