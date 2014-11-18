@@ -24,66 +24,60 @@ MapRenderer.prototype = {
     return String(d);
   },
 
-  compareNumber: function(op, a, b) {
-    switch (op) {
-      case 'lte': return a <= b;
-      case 'lt': return a < b;
-      case 'eq': return a === b;
-      case 'gt': return a > b;
-      case 'gte': return a >= b;
+  // Gets the style for a value:
+  // field is defined as "fill_color".
+  getStyle: function(field, row) {
+    var opts = this.options;
+    var defaultStyle = opts[field];
+    var fields = field.split('_');
+    var styles = opts[fields[0]+'s'];
+    var styleAttr = fields[1];
+
+    // Return early with default style if there are no options:
+    if (!styles.length || !row) return defaultStyle;
+
+    var columnName = opts[field+'_column'];
+    var isNumeric = (opts.columns[columnName] === 'number');
+    var value = row[columnName];
+
+    // Parse numeric column, and return default style for null values:
+    if (isNumeric) {
+      value = this.parseNumber(value);
+      if (value === null) return defaultStyle;
+    } else {
+      value = String(value);
     }
-  },
 
-  // Parses all styler values based on their column datatype:
-  // We'll need to make sure that styler values match data value types.
-  parseStyles: function(opts) {
-    var parsers = {
-      'number': this.parseNumber,
-      'string': this.parseString
-    };
+    for (var i = 0; i < styles.length; i++) {
+      var style = styles[i];
+      var op = style.operator;
+      var delta = isNumeric ? 
+        value - this.parseNumber(style.value) : 
+        value.localeCompare(String(style.value));
 
-    for (var i=0; i < opts.styles.length; i++) {
-      var style = opts.styles[i];
-      var columnName = opts[style.type+'_column'];
-      var dataType = opts.columns[columnName];
-      style.value = parsers[dataType](style.value);
+      if (
+        (op === 'lt' && delta < 0) ||
+        (op === 'lte' && delta <= 0) ||
+        (op === 'eq' && delta === 0) ||
+        (op === 'gte' && delta >= 0) ||
+        (op === 'gt' && delta > 0)
+      ) return style[styleAttr];
     }
-  },
 
-  // getCSVParser( {columns:'types'} )
-  // Builds a parser function for assembling typed CSV data.
-  // NOTE: parsing number types MUST preserve the distinction between no data and zero data...
-  // Therefore, empty numeric values are specifically parsed as NULL rather than coerced into Zero.
-  // @param columns => {id: 'string', value: 'number'}
-  getCSVParser: function(columns) {
-    // If columns are not defined, then return a pass-through.
-    if (!columns) return function() { return d; };
-
-    // Otherwise, build data-type accessor function:
-    var accessors = [];
-
-    for (var column in columns) {
-      var accessor = 'd["'+column+'"]';
-      if (columns[column] === 'number') accessor = (accessor+' ? +'+accessor+' : null');
-      accessors.push('"'+column+'": '+accessor);
-    }
-    
-    return new Function('d', 'return {'+ accessors.join(',') +'};');
+    return defaultStyle;
   },
 
   // Initializes the map with graphics and data:
   init: function(opts) {
-    // Projections for future consideration:
-    // times, wagner6, naturalEarth, robinson
     var self = this;
-    var loadedCSV = false;
-    var loadedJSON = false;
-    var done = function() {
-      if (loadedCSV && loadedJSON) {
+    var jsonLoaded = false;
+    var csvLoaded = false;
+    function done() {
+      if (jsonLoaded && csvLoaded) {
         self.options = opts;
-        self.render(opts);
+        self.render();
       }
-    };
+    }
 
     if (!this.el) {
       var svg = d3.select('#'+opts.el).append('svg').attr('width', '100%');
@@ -95,44 +89,35 @@ MapRenderer.prototype = {
       };
     }
 
-    this.parseStyles(opts);
-
     this.loadCSV(opts, function() {
-      loadedCSV = true;
+      csvLoaded = true;
       done();
     });
 
     this.loadJSON(opts, function() {
-      loadedJSON = true;
+      jsonLoaded = true;
       done();
     });
   },
 
   // Loads CSV data rows based on map options:
   loadCSV: function(opts, done) {
-    if (opts.rows) {
-      // Rows provided:
-      opts.rows = opts.rows.map(this.getCSVParser(opts.columns));
+    if (opts.rows) return done();
+
+    // CSV needs to load:
+    d3.csv(opts.csv, function(error, rows) {
+      opts.rows = rows;
       done();
-
-    } else {
-      // Load CSV rows:
-      d3.csv(opts.csv, this.getCSVParser(opts.columns), function(error, rows) {
-        opts.rows = rows;
-        done();
-      });
-    }
+    });
   },
-
-  // Loads map shapefile JSON based on map options:
+  
   loadJSON: function(opts, done) {
-    // Return early if this map has already been loaded:
     if (opts.type === this.options.type) return done();
-
-    // Configure type-specific resources:
     var projection, featureset;
     var self = this;
 
+    // Projections for future consideration...
+    // times, wagner6, naturalEarth, robinson
     switch (opts.type) {
       case 'world':
         projection = d3.geo.times();
@@ -191,6 +176,7 @@ MapRenderer.prototype = {
     var data = topojson.feature(this.data, this.features).features;
 
     var rows = {};
+    var self = this;
 
     for (var i=0; i < opts.rows.length; i++) {
       var row = opts.rows[i];
@@ -199,7 +185,7 @@ MapRenderer.prototype = {
 
     var map = this.el.map
       .selectAll('path')
-      .data(data)
+      .data(data);
 
     map
       .enter()
@@ -208,7 +194,7 @@ MapRenderer.prototype = {
     map
       .attr('data-id', function(d) { return d.id; })
       .attr('fill', function(d) {
-        return opts.fill_color;
+        return self.getStyle('fill_color', rows[String(d.id)]);
       })
       .attr('stroke', opts.stroke_color)
       .attr('stroke-width', opts.stroke_width)
