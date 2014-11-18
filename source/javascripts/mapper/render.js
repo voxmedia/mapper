@@ -26,17 +26,18 @@ MapRenderer.prototype = {
 
   // Gets the style for a value:
   // field is defined as "fill_color".
-  getStyle: function(field, row) {
+  getStyle: function(styler, row) {
     var opts = this.options;
-    var defaultStyle = opts[field];
-    var fields = field.split('_');
-    var styles = opts[fields[0]+'s'];
-    var styleAttr = fields[1];
+    var defaultStyle = opts[styler];
+    styler = styler.split('_');
+    var styleGroup = styler[0];
+    var styleAttr = styler[1];
+    var styles = opts[styleGroup+'s'];
 
     // Return early with default style if there are no options:
     if (!styles.length || !row) return defaultStyle;
 
-    var columnName = opts[field+'_column'];
+    var columnName = opts[styleGroup+'_column'];
     var isNumeric = (opts.columns[columnName] === 'number');
     var value = row[columnName];
 
@@ -55,6 +56,9 @@ MapRenderer.prototype = {
         value - this.parseNumber(style.value) : 
         value.localeCompare(String(style.value));
 
+      if (styleAttr === 'size') {
+        console.log(value, style);
+      }
       if (
         (op === 'lt' && delta < 0) ||
         (op === 'lte' && delta <= 0) ||
@@ -175,12 +179,18 @@ MapRenderer.prototype = {
   renderMap: function(opts) {
     var data = topojson.feature(this.data, this.features).features;
 
-    var rows = {};
+    
     var self = this;
+    var rows = {};
+    var size = 0;
 
     for (var i=0; i < opts.rows.length; i++) {
-      var row = opts.rows[i];
-      rows[row.id] = row;
+      var r = opts.rows[i];
+      rows[r.id] = r;
+    }
+
+    function row(d) {
+      return rows[String(d.id)];
     }
 
     var map = this.el.map
@@ -193,11 +203,9 @@ MapRenderer.prototype = {
 
     map
       .attr('data-id', function(d) { return d.id; })
-      .attr('fill', function(d) {
-        return self.getStyle('fill_color', rows[String(d.id)]);
-      })
-      .attr('stroke', opts.stroke_color)
-      .attr('stroke-width', opts.stroke_width)
+      .attr('fill', function(d) { return self.getStyle('fill_color', row(d)); })
+      .attr('stroke', function(d) { return self.getStyle('stroke_color', row(d)); })
+      .attr('stroke-width', function(d) { return (size = self.getStyle('stroke_size', row(d))); })
       .attr('d', this.path);
 
     map
