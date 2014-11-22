@@ -14,14 +14,20 @@
 
   Mapper.models.Styles = Backbone.Collection.extend({
     model: Style,
-    comparator: 'value',
 
-    initialize: function() {
-      this.listenTo(this, 'change:value', this.sort);
-    },
-
+    // Adds a new item to the list:
     newItem: function(opts) {
       this.add(opts || {});
+    },
+
+    // Shifts an item order by the specified offset:
+    shiftItem: function(model, dir) {
+      var at = this.indexOf(model);
+      if (at + dir >= 0 && at + dir < this.length) {
+        this.models.splice(at, 1);
+        this.models.splice(at+dir, 0, model);
+        this.trigger('sort');
+      }
     }
   });
 

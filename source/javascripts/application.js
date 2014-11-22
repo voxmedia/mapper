@@ -13,8 +13,7 @@
 //= require "mapper/views/editor-main"
 //= require "mapper/views/editor-settings"
 //= require "mapper/views/editor-style-base"
-//= require "mapper/views/editor-style-fill"
-//= require "mapper/views/editor-style-stroke"
+//= require "mapper/views/editor-style-list"
 
 //= require "mapper/interactive"
 

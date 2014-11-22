@@ -15,7 +15,7 @@
 
     // Selects a plotted cohort color for a value:
     // Cohorts use value fills and editorially defined comparison operators.
-    getCohortData: function(value) {
+    /*getCohortData: function(value) {
       // Parse the data value:
       value = this.val(value);
 
@@ -111,7 +111,7 @@
 
       // Otherwise, use cohort picking:
       return this.getCohortData(value);
-    }
+    }*/
   };
 
   // Individual Datum model:
@@ -121,18 +121,6 @@
     defaults: {
       id: '',
       value: 0
-    },
-
-    getFillColor: function() {
-      return DataFormatter.map(this, 'fill', 'color');
-    },
-
-    getStrokeColor: function() {
-      return DataFormatter.map(this, 'stroke', 'color');
-    },
-
-    getStrokeSize: function() {
-      return DataFormatter.map(this, 'stroke', 'size');
     }
   });
 
@@ -172,33 +160,21 @@
       this.trigger('sort');
     },
 
-    seed: function(data) {
-      var models = [];
-
-      for (var id in data) {
-        if (data.hasOwnProperty(id)) {
-          models.push({id: id, shape: data[id]});
-        }
-      }
-
-      this._datatypes = {};
-      this.reset(models);
-    },
-
     loadCSV: function(file) {
       var reader = new FileReader();
 
       reader.onload = _.bind(function() {
-        var data = d3.csv.parse(reader.result);
-        if (data.length) {
-          this._datatypes = {};
-          this.reset(data, {silent: true});
-          Mapper.settings.set('columns', this.getColumns());
-          this.trigger('reset change');
-        }
+        this.resetData(d3.csv.parse(reader.result));
       }, this);
 
       reader.readAsText(file);
+    },
+
+    resetData: function(data) {
+      this._datatypes = {};
+      this.reset(data, {silent: true});
+      Mapper.settings.set('columns', this.getColumns());
+      this.trigger('reset change');
     },
 
     // Gets an object with all columns and their data types.

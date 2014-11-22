@@ -18,12 +18,14 @@ var Mapper = {
       model: this.settings
     });
 
-    var editorFillView = new this.views.EditorStyleFillView({
+    var editorFillView = new this.views.EditorStyleListView({
+      el: '#editor-style-fill',
       collection: this.fills,
       model: this.settings
     });
 
-    var editorStrokeView = new this.views.EditorStyleStrokeView({
+    var editorStrokeView = new this.views.EditorStyleListView({
+      el: '#editor-style-stroke',
       collection: this.strokes,
       model: this.settings
     });

@@ -2,7 +2,8 @@ Mapper.views.EditorMainView = Backbone.View.extend({
   el: '#editor-main',
 
   initialize: function() {
-    this.setView('editor-settings');
+    //this.setView('editor-settings');
+    this.setView('editor-style');
   },
 
   setView: function(tab) {

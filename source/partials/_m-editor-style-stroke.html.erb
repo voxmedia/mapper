@@ -7,7 +7,7 @@
         <option value="value">value</option>
       </select>
     </div>
-    <button id="style-stroke-add" class="m-editor__util m-editor-style__add">+</button>
+    <button class="m-editor__util m-editor-style__add" data-ui="add">+</button>
   </header>
   <table class="style-form">
     <thead>
@@ -18,19 +18,28 @@
         <th class="color">Hex</th>
         <th class="value">Value</th>
         <th class="operator">Compare</th>
-        <th class="destroy"></th>
       </tr>
     </thead>
     <tbody data-bind="collection:$collection"></tbody>
   </table>
-  <script type="text/template" id="style-stroke-item">
+  <script type="text/template" id="style-list-item">
     <tr>
-      <td><span class="swatch" data-bind="css:{'border-color':color,'border-width':size}"></span></td>
-      <td><input type="text" name="label" data-bind="value:label"></td>
-      <td><input type="text" name="size" data-bind="value:size"></td>
-      <td><input type="text" name="color" data-bind="value:color"></td>
-      <td><input type="text" name="value" data-bind="value:value"></td>
-      <td>
+      <td class="show">
+        <div class="style-form__options">
+          <span class="swatch" data-bind="css:{'background-color':color,'border-color':color,'border-width':size}"></span>
+          <ul>
+            <li class="legend"><label><input type="checkbox" data-bind="checked:inLegend"> In Legend</button></li>
+            <li class="destroy"><button data-ui="destroy">Remove</button></li>
+            <li class="shift-up"><button data-ui="up">Move Up</button></li>
+            <li class="shift-down"><button data-ui="down">Move Down</button></li>
+          </ul>
+        </div>
+      </td>
+      <td class="label"><input type="text" name="label" data-bind="value:label"></td>
+      <td class="size"><input type="text" name="size" data-bind="value:size"></td>
+      <td class="color"><input type="text" name="color" data-bind="value:color"></td>
+      <td class="value"><input type="text" name="value" data-bind="value:value"></td>
+      <td class="operator">
         <select data-bind="value:operator">
           <option value="lt">&lt;</option>
           <option value="lte">&lt;=</option>
@@ -39,7 +48,6 @@
           <option value="gt">&gt;</option>
         </select>
       </td>
-      <td><button class="destroy">+</button></td>
     </tr>
   </script>
 </div>

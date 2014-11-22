@@ -40,6 +40,7 @@ $m: '.m-editor-style';
   .swatch {
     border-radius: 3px;
     border-style: solid;
+    box-sizing: border-box;
     display: block;
     height: 16px;
     padding: 2px;
@@ -87,9 +88,92 @@ $m: '.m-editor-style';
     padding-bottom: 15px;
     padding-right: 10px;
     
-    input,
+    input[type="text"],
     select {
       width: 100%;
     }
   }
+}
+
+.style-form__options {
+  position: relative;
+  width: 100%;
+
+  .menu {
+    cursor: default;
+  }
+
+  ul {
+    background-color: white;
+    border: 1px solid $gray-light;
+    border-radius: 5px;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.25);
+    display: none;
+    left: calc(100% + 5px);
+    padding: 5px;
+    position: absolute;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    transform: translateY(-50%);
+    width: 100px;
+    z-index: 10;
+
+    &:before,
+    &:after {
+      border: 10px solid transparent;
+      border-right-color: $gray-light;
+      border-left: none;
+      content: '';
+      display: block;
+      height: 0;
+      left: -10px;
+      margin-top: -10px;
+      position: absolute;
+      top: 50%;
+      width: 0;
+    }
+
+    &:after {
+      border-right-color: white;
+      left: -9px;
+    }
+  }
+
+  &:hover ul {
+    display: block;
+  }
+
+  button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    display: inline;
+    text-wrap: none;
+
+    &:hover {
+      color: $action-color;
+    }
+  }
+
+  label,
+  button {
+    font: 11px/1.5 $sans;
+  }
+
+  tr:first-child & .shift-up {
+    display: none;
+  }
+
+  tr:last-child & .shift-down {
+    display: none;
+  }
+}
+
+#editor-style-fill {
+  .swatch { border: none !important; }
+  .size { display: none !important; }
+}
+
+#editor-style-stroke {
+  .swatch { background: none !important; }
 }
