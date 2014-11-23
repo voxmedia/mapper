@@ -27,21 +27,24 @@ function MapRenderer(opts) {
     },
 
     parseTooltip: function() {
-      _.templateSettings = {};
+      var templateSettings = _.templateSettings
+      _.templateSettings = {interpolate: /\{\{(.+?)\}\}/g};
+      var template = _.template(this.options.tooltip);
+      _.templateSettings = templateSettings;
+      return template;
     },
 
     // Gets the style for a value:
     // field is defined as "fill_color".
     getStyle: function(styler, row) {
       var opts = this.options;
-      var defaultStyle = opts[styler];
       styler = styler.split('_');
       var styleGroup = styler[0];
       var styleAttr = styler[1];
       var styles = opts[styleGroup+'s'];
 
       // Return early with default style if there are no options:
-      if (!styles.length || !row) return defaultStyle;
+      if (!styles.length || !row) return null;
 
       var columnName = opts[styleGroup+'_column'];
       var isNumeric = (opts.columns[columnName] === 'number');
@@ -50,7 +53,7 @@ function MapRenderer(opts) {
       // Parse numeric column, and return default style for null values:
       if (isNumeric) {
         value = this.parseNumber(value);
-        if (value === null) return defaultStyle;
+        if (value === null) return null;
       } else {
         value = String(value);
       }
@@ -71,7 +74,7 @@ function MapRenderer(opts) {
         ) return style[styleAttr];
       }
 
-      return defaultStyle;
+      return null;
     },
 
     // Initializes the map with graphics and data:
@@ -164,6 +167,7 @@ function MapRenderer(opts) {
       var pad = 20;
       var yinc = pad;
       var rows = {};
+      var tooltip = this.parseTooltip();
 
       // Convert data rows into an object with ids:
       for (var i = 0; i < opts.rows.length; i++) {
@@ -173,10 +177,13 @@ function MapRenderer(opts) {
       for (i = 0; i < this.geodata.length; i++) {
         var geo = this.geodata[i];
         var row = rows[String(geo.id)];
+        if (!row) continue;
+
         geo.properties = {
           fill_color: self.getStyle('fill_color', row),
           stroke_color: self.getStyle('stroke_color', row),
-          stroke_size: self.getStyle('stroke_size', row)
+          stroke_size: self.getStyle('stroke_size', row),
+          tooltip: tooltip(row)
         };
       }
 
@@ -207,9 +214,10 @@ function MapRenderer(opts) {
 
       geo
         .attr('data-id', function(d) { return d.id; })
-        .attr('fill', function(d) { return d.properties.fill_color; })
-        .attr('stroke', function(d) { return d.properties.stroke_color; })
-        .attr('stroke-width', function(d) { return d.properties.stroke_size; })
+        .attr('fill', function(d) { return d.properties.fill_color || opts.fill_color; })
+        .attr('stroke', function(d) { return d.properties.stroke_color || opts.stroke_color; })
+        .attr('stroke-width', function(d) { return d.properties.stroke_size || opts.stroke_size; })
+        .attr('data-tooltip', function(d) { return d.properties.tooltip; })
         .attr('d', this.path);
 
       geo
