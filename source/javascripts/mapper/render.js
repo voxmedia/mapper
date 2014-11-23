@@ -151,11 +151,19 @@ function MapRenderer(opts) {
       d3.json('data/'+opts.type+'.json', function(error, data) {
         self.geodata = topojson.feature(data, data.objects[featureset]).features;
         self.path = d3.geo.path().projection(projection);
-        if (!self.data) self.data = self.geodata.map(function(d) { d.properties.value = '0'; return d.properties; });
+        
+        // Map array of geo properties:
+        // Give all countries an empty value, and exclude unnamed geographies.
+        var data = [];
+        for (var i = 0; i < self.geodata.length; i++) {
+          var props = self.geodata[i].properties;
+          if (props.name) data.push(props);
+        }
+
         done();
 
         // Populate map data as rows:
-        if (typeof self.onData === 'function') self.onData(self.data);
+        if (typeof self.onData === 'function') self.onData(data);
       });
     },
 
@@ -175,16 +183,15 @@ function MapRenderer(opts) {
       }
 
       for (i = 0; i < this.geodata.length; i++) {
-        var geo = this.geodata[i];
+        var geo = this.geodata[i].properties || {};
         var row = rows[String(geo.id)];
-        if (!row) continue;
 
-        geo.properties = {
-          fill_color: self.getStyle('fill_color', row),
-          stroke_color: self.getStyle('stroke_color', row),
-          stroke_size: self.getStyle('stroke_size', row),
-          tooltip: tooltip(row)
-        };
+        if (row) {
+          geo.fill_color = self.getStyle('fill_color', row);
+          geo.stroke_color = self.getStyle('stroke_color', row);
+          geo.stroke_size = self.getStyle('stroke_size', row);
+          geo.tooltip = tooltip(row);
+        }
       }
 
       // Sort geographies by stroke size:

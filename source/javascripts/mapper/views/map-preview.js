@@ -6,7 +6,10 @@ Mapper.views.MapRenderView = Backbone.View.extend({
     _.extend(this, opts);
     this.$el.find('#map-renderer').attr('id', this.settings.get('el'));
     this.renderer = new MapRenderer();
-    this.renderer.onData = _.bind(this.data.resetData, this.data);
+    this.renderer.onData = _.bind(function(data) {
+      data = _.each(data, function(d) { d.value = '0'; });
+      this.data.resetData(data);
+    }, this);
 
     this.listenTo(this.data, 'reset change', this.render);
     this.listenTo(this.fills, 'add remove change sort', this.render);
