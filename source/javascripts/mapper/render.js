@@ -151,7 +151,7 @@ function MapRenderer(opts) {
       d3.json('data/'+opts.type+'.json', function(error, data) {
         self.geodata = topojson.feature(data, data.objects[featureset]).features;
         self.path = d3.geo.path().projection(projection);
-        if (!self.data) self.data = self.geodata.map(function(d) { return {id: String(d.id), value: '0'}; });
+        if (!self.data) self.data = self.geodata.map(function(d) { d.properties.value = '0'; return d.properties; });
         done();
 
         // Populate map data as rows:
