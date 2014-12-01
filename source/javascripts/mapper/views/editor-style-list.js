@@ -26,12 +26,16 @@
   Mapper.views.EditorStyleListView = Backbone.Epoxy.View.extend({
     itemView: EditorStyleItemView,
 
+    initialize: function(opts) {
+      _.extend(this, opts);
+    },
+
     events: {
       'click [data-ui="add"]': 'onAdd'
     },
 
     onAdd: function() {
-      this.collection.newItem();
+      this.collection.add({type: this.type});
     }
   });
 

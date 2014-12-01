@@ -15,11 +15,6 @@
   Mapper.models.Styles = Backbone.Collection.extend({
     model: Style,
 
-    // Adds a new item to the list:
-    newItem: function(opts) {
-      this.add(opts || {});
-    },
-
     // Shifts an item order by the specified offset:
     shiftItem: function(model, dir) {
       var at = this.indexOf(model);

@@ -21,13 +21,15 @@ var Mapper = {
     var editorFillView = new this.views.EditorStyleListView({
       el: '#editor-style-fill',
       collection: this.fills,
-      model: this.settings
+      model: this.settings,
+      type: 'fill'
     });
 
     var editorStrokeView = new this.views.EditorStyleListView({
       el: '#editor-style-stroke',
       collection: this.strokes,
-      model: this.settings
+      model: this.settings,
+      type: 'stroke'
     });
     
     var editorData = new this.views.EditorDataView({
