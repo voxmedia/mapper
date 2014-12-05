@@ -3,6 +3,10 @@
 //= require "vendor/backbone"
 //= require "vendor/backbone.epoxy"
 
+//= require "vendor/canvg/rgbcolor"
+//= require "vendor/canvg/StackBlur"
+//= require "vendor/canvg/canvg"
+
 //= require "mapper/main"
 //= require "mapper/models/settings"
 //= require "mapper/models/styles"

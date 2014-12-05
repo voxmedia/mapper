@@ -6,18 +6,45 @@ Mapper.models.Settings = Backbone.Epoxy.Model.extend({
     background_color: '#eeeeee',
     fill_color: '#dddddd',
     fill_column: 'value',
+    font_color: 'black',
     heat_clamp: true,
     heat_scale: false,
     height: 500,
+    theme: 'light',
     type: 'world',
-    title: 'My Awesome Map',
-    tooltip: 'State {{ id }}: {{ value }}',
+    tooltip: '{{ id }}: {{ value }}',
     stroke_color: 'rgba(255,255,255,0.25)',
     stroke_column: 'value',
     stroke_size: 1,
-    title_font: '24px "Balto", Helvetica',
-    legend_font: 'italic 14px "Balto", Helvetica',
+    header: 'My Awesome Map',
+    header_font: '700 35px "Balto", Helvetica',
+    subheader: 'Subheading',
+    subheader_font: '15px "Balto", Helvetica',
+    legend_font: 'bold 14px "Balto", Helvetica',
     width: 960
+  },
+
+  themes: [
+    {
+      theme: 'light',
+      background_color: '#e9e7e8',
+      font_color: 'black'
+    },
+    {
+      theme: 'dark',
+      background_color: '#63676a',
+      font_color: 'white'
+    }
+  ],
+
+  initialize: function() {
+    this.listenTo(this, 'change:theme', this.setTheme);
+    this.setTheme();
+  },
+
+  setTheme: function() {
+    // Finds selected theme definition, and sets its attributes to the model:
+    this.set(_.findWhere(this.themes, {theme: this.get('theme')}) || {});
   },
 
   computeds: {

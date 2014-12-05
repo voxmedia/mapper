@@ -1,7 +1,35 @@
 // Map renderer:
 
+Mapper.exporting = {
+  canvas: document.createElement("canvas"),
+  render: _.debounce(function() {
+    this.canvas.width = 1024;
+    this.canvas.height = 1000;
+
+    var version = Date.now();
+    var svg = document.querySelector('#map-preview svg');
+    svg.setAttributeNS(null, 'width', '1024px');
+
+    var xml = new XMLSerializer().serializeToString(svg);
+    canvg(this.canvas, xml, { ignoreMouse: true, ignoreAnimation: true });
+    svg.setAttributeNS(null, 'width', '100%');
+
+    $('#export-svg').attr({
+      href: 'data:image/svg+xml;base64,'+window.btoa(xml),
+      download: 'map-'+version+'.svg'
+    });
+
+    $('#export-png').attr({
+      href: this.canvas.toDataURL(),
+      download: 'map-'+version+'.png'
+    });
+
+  }, 100)
+};
+
 Mapper.views.MapRenderView = Backbone.View.extend({
   el: '#map-preview',
+
   initialize: function(opts) {
     _.extend(this, opts);
     this.$el.find('#map-renderer').attr('id', this.settings.get('el'));
@@ -20,8 +48,30 @@ Mapper.views.MapRenderView = Backbone.View.extend({
 
   render: _.debounce(function() {
     this.renderer.init(Mapper.getRenderConfig({rows: true}));
+    Mapper.exporting.render();
   }, 10)
 });
+
+
+/*
+$(function() {
+  $('img[alt="PNG"]').click(function() {
+    var canvas = document.getElementById("canvas");
+    var ctx = canvas.getContext("2d");
+    var DOMURL = self.URL || self.webkitURL || self;
+    var img = new Image();
+    var svg = new Blob([svgString], {type: "image/svg+xml;charset=utf-8"});
+    var url = DOMURL.createObjectURL(svg);
+    img.onload = function() {
+        ctx.drawImage(img, 0, 0);
+        var png = canvas.toDataURL("image/png");
+        document.querySelector('#png-container').innerHTML = '<img src="'+png+'" alt="">';
+        DOMURL.revokeObjectURL(png);
+    };
+    img.src = url;
+  });
+});
+*/
 
 /*
 Mapper.views.MapRenderView = Backbone.View.extend({

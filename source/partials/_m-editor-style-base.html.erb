@@ -2,7 +2,15 @@
   <header>
     <h1 class="m-editor__field">Base Styles</h1>
   </header>
-  <p class="row"><label for="background-fill">Background fill:</label> <input id="background-fill" type="text" data-bind="value:background_color" class="input-large"></p>
+  <p class="row">
+    <label for="base-theme">Theme:</label> 
+    <select id="base-theme" data-bind="value:theme">
+      <option value="light">Light</option>
+      <option value="dark">Dark</option>
+    </select>
+  </p>
+  <p class="row"><label for="background-fill">Background fill:</label> <input id="background-fill" type="text" data-bind="value:background_color" class="input-large" readonly="readonly"></p>
+  <p class="row"><label for="font-fill">Font color:</label> <input id="font-fill" type="text" data-bind="value:font_color" class="input-large" readonly="readonly"></p>
   <p class="row"><label for="base-fill">Base fill:</label> <input id="base-fill" type="text" data-bind="value:fill_color" class="input-large"></p>
   <p class="row"><label for="base-stroke">Base stroke:</label> <input id="base-stroke" type="text" data-bind="value:stroke_color" class="input-large"></p>
 </div>

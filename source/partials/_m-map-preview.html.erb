@@ -2,9 +2,9 @@
   <header>
     <h1 class="m-editor__field">Preview</h1>
     <ul class="m-editor__util m-share">
-      <li><a href="#"><%= image_tag 'share-svg.png', :alt => 'SVG' %></a></li>
-      <li><a href="#"><%= image_tag 'share-png.png', :alt => 'PNG' %></a></li>
-      <li><a href="#"><%= image_tag 'share-embed.jpg', :alt => 'Embed' %></a></li>
+      <li><a id="export-svg" href="#" title="SVG" download="map.svg"><%= image_tag 'share-svg.png', :alt => 'SVG' %></a></li>
+      <li><a id="export-png" href="#" title="PNG" download="map.png"><%= image_tag 'share-png.png', :alt => 'PNG' %></a></li>
+      <li><a id="export-embed" href="#" title="Embed"><%= image_tag 'share-embed.png', :alt => 'Embed' %></a></li>
     </ul>
   </header>
   <div id="map-renderer"></div>

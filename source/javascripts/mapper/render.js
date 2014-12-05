@@ -48,7 +48,7 @@ function MapRenderer(opts) {
         this.el.bg = svg.append('rect');
         this.el.map = svg.append('g');
         this.el.legend = svg.append('g');
-        this.el.title = svg.append('text');
+        this.el.header = svg.append('text');
         this.el.brand = svg.append('path');
       }
 
@@ -185,7 +185,7 @@ function MapRenderer(opts) {
       // Render data, title, and all geographies:
       this._y = 20;
       renderData(this);
-      renderTitle(this);
+      renderHeaders(this);
       renderGeography(this);
 
       // Render legend based on map type:
@@ -235,21 +235,22 @@ function MapRenderer(opts) {
     });
   }
 
-  // Render Title
+  // Render Headers
   //
-  // Renders the map's title 
-  function renderTitle(map) {
+  // Renders the map's header and subhead 
+  function renderHeaders(map) {
     var opts = map.options;
-    var title = map.el.title
+    var header = map.el.header
       .attr('x', opts.width/2)
       .attr('y', map._y)
       .style('dominant-baseline', 'hanging')
       .style('text-anchor', 'middle')
-      .style('font', opts.title_font)
-      .text(opts.title);
+      .style('font', opts.header_font)
+      .style('fill', opts.font_color)
+      .text(opts.header);
 
     // Increment Y-rendering position:
-    map._y += title.node().getBBox().height + 20;
+    map._y += header.node().getBBox().height + 20;
   }
 
   // Render Geography
@@ -319,6 +320,7 @@ function MapRenderer(opts) {
     // Set text for each label, then find maximum width label:
     labels
       .text(function(d) { return d.label; })
+      .attr('style', 'font:'+opts.legend_font+';fill:'+opts.font_color)
       .each(function(d) {
         maxWidth = Math.max(maxWidth, this.getComputedTextLength());
       });
