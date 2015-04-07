@@ -12,7 +12,7 @@ Mapper.models.Settings = Backbone.Epoxy.Model.extend({
     height: 500,
     theme: 'light',
     type: 'world',
-    tooltip: '{{ id }}: {{ value }}',
+    tooltip: '<%= name %>: <%= value %>',
     stroke_color: 'rgba(255,255,255,0.25)',
     stroke_column: 'value',
     stroke_size: 1,

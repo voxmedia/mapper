@@ -172,15 +172,11 @@ function MapRenderer(opts) {
     // Renders the map with new data:
     render: function() {
       var opts = this.options;
-      var heat = d3.scale.linear()
+      
+      this.heat = d3.scale.linear()
         .domain(opts.fills.map(function(d) { return +d.value; }))
         .range(opts.fills.map(function(d) { return d3.rgb(d.color); }))
         .clamp(opts.heat_clamp);
-
-      /*var threshold = d3.scale.threshold()
-        .domain(opts.fills.map(function(d) { return +d.value; }))
-        .range(opts.fills.map(function(d) { return d3.rgb(d.color); }));
-        //.clamp(opts.heat_clamp);*/
 
       // Render data, title, and all geographies:
       this._y = 20;
@@ -218,7 +214,7 @@ function MapRenderer(opts) {
 
       if (row) {
         if (opts.heat_scale) {
-          geo.fill_color = heat(map.getRowValue('fill_color', row));
+          geo.fill_color = map.heat(map.getRowValue('fill_color', row));
         } else {
           geo.fill_color = map.getStyle('fill_color', row);
         }
@@ -369,10 +365,12 @@ function MapRenderer(opts) {
   }
 
   function renderHeatLegend(map) {
-    if (this.el.defs) this.el.defs.remove();
-    this.el.defs = this.el.svg.append('defs').html('');
+    if (map.el.defs) map.el.defs.remove();
+    map.el.defs = map.el.svg.append('defs').html('');
 
-    var gradient = this.el.defs
+    var opts = map.options;
+    
+    var gradient = map.el.defs
       .append('linearGradient')
       .attr('id', 'heat')
       .attr('x1', '0%')
@@ -380,7 +378,7 @@ function MapRenderer(opts) {
       .attr('x2', '100%')
       .attr('y2', '0%');
 
-    var ramp = this.el.svg
+    var ramp = map.el.svg
       .append('rect')
       .attr('width', 150)
       .attr('height', 20)
