@@ -185,9 +185,9 @@ function MapRenderer(opts) {
       renderGeography(this);
 
       // Render legend based on map type:
-      if (opts.heat_scale) renderHeatLegend(this);
-      else renderCohortLegend(this);
-
+      //opts.heat_scale ? renderHeatLegend(this) : renderCohortLegend(this);
+      renderCohortLegend(this)
+      
       // Render frame bounds and brand watermark:
       renderFrame(this);
       renderBrand(this);
@@ -292,10 +292,17 @@ function MapRenderer(opts) {
     map._y += Math.round(bbox.height * scale) + pad;
   }
 
+  // Legend Reset
+  // Removes outdated legend display before rendering new graphics.
+  function resetLegend(map) {
+    if (map.el.defs) map.el.defs.remove();
+    map.el.legend.html('');
+  }
+
   // Render Legend (Cohorts)
-  //
   // Renders the cohort-color swatch grid & labels.
   function renderCohortLegend(map) {
+    resetLegend(map);
     var opts = map.options;
     var legend = map.el.legend;
     var data = opts.fills.concat(opts.strokes).filter(function(d) { return d.inLegend; });
@@ -364,12 +371,15 @@ function MapRenderer(opts) {
     map._y += layout.h() + pad;
   }
 
+  // Render Legend (Heat Scale)
+  // Renders a heat gradient bar.
   function renderHeatLegend(map) {
-    if (map.el.defs) map.el.defs.remove();
+    resetLegend(map);
     map.el.defs = map.el.svg.append('defs').html('');
 
     var opts = map.options;
-    
+    var legend = map.el.legend;
+
     var gradient = map.el.defs
       .append('linearGradient')
       .attr('id', 'heat')
@@ -378,7 +388,7 @@ function MapRenderer(opts) {
       .attr('x2', '100%')
       .attr('y2', '0%');
 
-    var ramp = map.el.svg
+    var ramp = legend
       .append('rect')
       .attr('width', 150)
       .attr('height', 20)
@@ -390,6 +400,8 @@ function MapRenderer(opts) {
         .attr('offset', (i/(opts.fills.length-1) * 100)+'%')
         .attr('style', 'stop-color:'+fill.color);
     });
+
+    map._y += 20 + pad;
   }
 
   // Render Frame
@@ -413,7 +425,7 @@ function MapRenderer(opts) {
   //
   // Renders the brand mark in the lower-right corner.
   function renderBrand(map) {
-    if (typeof map.brand !== 'string') return;
+    if (!map.brand) return;
 
     var opts = map.options;
     var brand = map.el.brand.attr('d', map.brand);
@@ -447,7 +459,7 @@ function MapRenderer(opts) {
     + "');}return p.join('');");
   }
 
-  // Column Layout Helper
+  // Column Layout Helper (for legend items)
   // ---------------------------------------------------
   // Used for rendering legend items as balanced columns.
   // Accepts a numer of legend items, a minimum item width, and a total range to fill.
