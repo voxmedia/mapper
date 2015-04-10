@@ -4,7 +4,7 @@ This tools generates pre-prendered interactive and/or static map graphics from a
 
 ![Mapper](screenshot.png)
 
-# Setup
+# Getting Started
 
 1) Install Middleman and the app:
 
@@ -21,6 +21,11 @@ cd mapper
 bundle exec middleman
 ```
 
-# Formatting data
+## Documentation
+
+### Formatting data
 
 Data can be imported in standard CSV format. The tool does support multiple columns of data, and will differentiate between number and string columns.
+
+## Examples
+
