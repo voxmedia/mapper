@@ -1,20 +1,20 @@
 # mapper
 
-This tool uses D3 to generate choropleth map graphics based upon a data set. Load in your data, configure your thresholds, and see the map render. This is a proof of concept app not currently in active production. We welcome any editorial community to use this as a starting point for building great mapping tools. Existing features:
+This tool uses D3 to generate choropleth map graphics based upon a data set. Drop in your CSV data, configure your color thresholds, and adjust your display settings. This is a proof of concept app that still needs many features built out, however we welcome any editorial community to use this as a starting point for building great mapping tools. Existing features:
 
- - World or US map.
- - Thresholds or heat scale rendering.
- - Outline rendering for select shapes based on data.
- - Basic legend rendering.
- - Export as PNG.
- - Export as SVG (needs some cleanup)
- - Interactive tooltip in preview mode (interactive version needs an export option)
+ - World and US State maps.
+ - Thresholds and heat scale fill rendering.
+ - Stroke rendering for select shapes.
+ - Basic legend layout.
+ - Export as PNG
+ - Export as SVG (needs cleanup)
+ - Interactive tooltip (needs interactive export option)
 
-![Mapper](screenshot.png)
+![Mapper](mapper.png)
 
 ## Getting Started
 
-1) Install Middleman and the app:
+**1) Install Middleman and the app:**
 
 ```
 gem install middleman
@@ -22,26 +22,35 @@ cd mapper
 bundle install
 ```
 
-2) To run the app:
+**2) To run the app:**
 
 ```
 bundle exec middleman
 ```
 
-3) To build the app:
+The app should startup at `localhost:4567`.
+
+**3) To build the app:**
 
 ```
 bundle exec middleman build
 ```
 
+This will generate a static `/build` directory with flat HTML, CSS, and JS files that may be uploaded to any web server.
+
 ## Documentation
 
-Data can be imported in standard CSV format. The tool does support multiple columns of data, and will differentiate between number and string columns.
+Use the provided CSV templates to format your data:
 
-## Examples
+- `csv/us-state.csv`
+- `csv/world.csv`
 
-Try out a [working build](http://gmac.github.io/mapper/build/index.html) of the mapper application.
+You may add additional columns to those data templates. The mapper application only requires that the `id` column remain unchanged for mapping shapes to data rows.
 
 ## Contribute
 
-This is an active project and we encourage contributions. [Please review our guidelines and code of conduct before contributing](https://github.com/voxmedia/open-source-contribution-guidelines).
+This is a proof of concept project and we encourage contributions. [Please review our guidelines and code of conduct before contributing](https://github.com/voxmedia/open-source-contribution-guidelines).
+
+## Author(s)
+
+- Greg MacWilliam, Vox Media.
