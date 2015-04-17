@@ -8,8 +8,6 @@
 /.bundle
 /.ruby-version
 
-# Ignore the build directory
-/build
 
 # Ignore data
 oauth2.json
