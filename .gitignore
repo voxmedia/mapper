@@ -7,11 +7,7 @@
 # Ignore bundler config
 /.bundle
 /.ruby-version
-
-
-# Ignore data
-oauth2.json
-/data/*.json
+/build/data/src
 
 # Ignore cache
 /.sass-cache

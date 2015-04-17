@@ -9,7 +9,7 @@ $m: '.m-editor';
     padding: 5px 15px;
 
     h1 {
-      font-family: $balto;
+      font-family: $title;
       font-size: 16px;
     }
   }
@@ -77,7 +77,7 @@ $m: '.m-editor';
     border-radius: 10px 10px 0 0;
     display: block;
     color: white;
-    font: 15px/30px $balto;
+    font: 15px/30px $title;
     height: 30px;
     text-align: center;
 

@@ -12,7 +12,7 @@ $m: '.m-editor-style';
   border: none;
   color: white;
   cursor: pointer;
-  font: 700 26px/30px $balto;
+  font: 700 26px/30px $title;
   transition: background-color 0.4s;
 
   &:hover {
@@ -71,7 +71,7 @@ $m: '.m-editor-style';
     color: #999;
     cursor: pointer;
     display: block;
-    font: 700 20px/20px $balto;
+    font: 700 20px/20px $title;
     height: 20px;
     text-align: center;
     @include transform(rotate(45deg));

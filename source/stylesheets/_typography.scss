@@ -1,20 +1,4 @@
-@font-face {
-  font-family: "Balto";
-  src: font-url('baltoweb-medium.eot');
-  src: font-url('baltoweb-medium.woff') format("woff");
-  font-weight: 500;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: "Balto";
-  src: font-url('baltoweb-bold.eot');
-  src: font-url('baltoweb-bold.woff') format("woff");
-  font-weight: 700;
-  font-style: normal;
-}
-
 h1 {
-  font-family: $balto;
+  font-family: $title;
   font-size: 20px;
 }

@@ -1,0 +1,51 @@
+id,postal,name,value
+2,ak,Alaska,0
+1,al,Alabama,0
+5,ar,Arkansas,0
+4,az,Arizona,0
+6,ca,California,0
+8,co,Colorado,0
+9,ct,Connecticut,0
+11,dc,District of Columbia,0
+10,de,Deleware,0
+12,fl,Florida,0
+13,ga,Georgia,0
+15,hi,Hawaii,0
+19,ia,Iowa,0
+16,id,Idaho,0
+17,il,Illinois,0
+18,in,Indiana,0
+20,ks,Kansas,0
+21,ky,Kentucky,0
+22,la,Louisiana,0
+25,ma,Massachusetts,0
+24,md,Maryland,0
+23,me,Maine,0
+27,mn,Minnesota,0
+29,mo,Missouri,0
+28,ms,Mississippi,0
+30,mt,Montana,0
+37,nc,North Carolina,0
+38,nd,North Dakota,0
+31,ne,Nebraska,0
+33,nh,New Hampshire,0
+34,nj,New Jersey,0
+35,nm,New Mexico,0
+32,nv,Nevada,0
+36,ny,New York,0
+39,oh,Ohio,0
+40,ok,Oklahoma,0
+41,or,Oregon,0
+42,pa,Pennsylvania,0
+44,ri,Rhode Island,0
+45,sc,South Carolina,0
+46,sd,South Dakota,0
+47,tn,Tennessee,0
+48,tx,Texas,0
+49,ut,Utah,0
+51,va,Virginia,0
+50,vt,Vermont,0
+53,wa,Washington,0
+55,wi,Wisconsin,0
+54,wv,West Virginia,0
+56,wy,Wyoming,0

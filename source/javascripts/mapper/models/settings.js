@@ -17,10 +17,10 @@ Mapper.models.Settings = Backbone.Epoxy.Model.extend({
     stroke_column: 'value',
     stroke_size: 1,
     header: 'My Awesome Map',
-    header_font: '700 35px "Balto", Helvetica',
+    header_font: '700 35px "Roboto", Helvetica',
     subheader: 'Subheading',
-    subheader_font: '15px "Balto", Helvetica',
-    legend_font: 'bold 14px "Balto", Helvetica',
+    subheader_font: '15px "Roboto", Helvetica',
+    legend_font: 'bold 14px "Roboto", Helvetica',
     width: 960
   },
 

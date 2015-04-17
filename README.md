@@ -1,7 +1,8 @@
 # mapper
 
-This tool uses D3 to generate choropleth map graphics based upon a data set. Load in your data, configure your thresholds, and see the map render. This is a proof of concept app not currently in active production. We welcome the editorial communities to use this as a starting point for building great mapping tools. Existing features:
+This tool uses D3 to generate choropleth map graphics based upon a data set. Load in your data, configure your thresholds, and see the map render. This is a proof of concept app not currently in active production. We welcome any editorial community to use this as a starting point for building great mapping tools. Existing features:
 
+ - World or US map.
  - Thresholds or heat scale rendering.
  - Outline rendering for select shapes based on data.
  - Basic legend rendering.
@@ -27,13 +28,19 @@ bundle install
 bundle exec middleman
 ```
 
-## Documentation
+3) To build the app:
 
-### Formatting data
+```
+bundle exec middleman build
+```
+
+## Documentation
 
 Data can be imported in standard CSV format. The tool does support multiple columns of data, and will differentiate between number and string columns.
 
 ## Examples
+
+Try out a [working build](http://gmac.github.io/mapper/build/index.html) of the mapper application.
 
 ## Contribute
 
